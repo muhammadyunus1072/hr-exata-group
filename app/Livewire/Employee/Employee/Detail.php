@@ -85,7 +85,7 @@ class Detail extends Component
             $this->nomor_karyawan = $employee->nomor_karyawan;
 
             // Personal Information
-            $this->nama_karyawan = $employee->nama_karyawan;
+            $this->nama_karyawan = $employee->name;
             $this->nomor_identitas = $employee->nomor_identitas;
             $this->tempat_lahir = $employee->tempat_lahir;
             $this->tanggal_lahir = $employee->tanggal_lahir;
