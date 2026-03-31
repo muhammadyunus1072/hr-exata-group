@@ -58,6 +58,18 @@
                         @enderror
                     </div>
                     <div class="col-md-4 mb-3">
+                        <label>Divisi</label>
+                        <select wire:model="divisi" class="form-select">
+                            @foreach (App\Models\User::DIVISI_CHOICE as $key => $name)    
+                                <option value="{{$name}}">{{$name}}</option>
+                            @endforeach
+                        </select>
+
+                        @error('divisi')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-md-4 mb-3">
                         <label>Tempat Lahir</label>
                         <input placeholder="Tempat Lahir" type="text" wire:model="tempat_lahir" class="form-control">
 
@@ -154,6 +166,17 @@
                                 @endforeach
                             </select>
                             <input type="text" wire:model="keterangan_apresiasi" placeholder="Keterangan" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label>Bank</label>
+                        <div class="input-group">
+                            <select wire:model="nama_bank" class="form-select">
+                                @foreach (App\Models\User::NAMA_BANK_CHOICE as $key => $name)    
+                                    <option value="{{$name}}">{{$name}}</option>
+                                @endforeach
+                            </select>
+                            <input type="text" wire:model="no_rekening" placeholder="No Rekening" class="form-control">
                         </div>
                     </div>
 

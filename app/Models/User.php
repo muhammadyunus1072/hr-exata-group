@@ -139,6 +139,30 @@ class User extends Authenticatable implements MustVerifyEmail
         self::STATUS_PERKAWINAN_BELUM_KAWIN => "Belum Kawin",
     ];
 
+    const NAMA_BANK_BCA = 'BCA';
+    const NAMA_BANK_MANDIRI = 'MANDIRI';
+    const NAMA_BANK_BRI = 'BRI';
+    const NAMA_BANK_BNI = 'BNI';
+    const NAMA_BANK_LAINNYA = 'LAINNYA';
+
+    const NAMA_BANK_CHOICE = [
+        self::NAMA_BANK_BCA => "BCA",
+        self::NAMA_BANK_MANDIRI => "MANDIRI",
+        self::NAMA_BANK_BRI => "BRI",
+        self::NAMA_BANK_BNI => "BNI",
+        self::NAMA_BANK_LAINNYA => "LAINNYA",
+    ];
+
+    const DIVISI_EXATA = 'EXATA';
+    const DIVISI_YANOSHI = 'YANOSHI';
+    const DIVISI_TRAVEL = 'TRAVEL';
+
+    const DIVISI_CHOICE = [
+        self::DIVISI_EXATA => "EXATA",
+        self::DIVISI_YANOSHI => "YANOSHI",
+        self::DIVISI_TRAVEL => "TRAVEL",
+    ];
+
     const APPRECIATION_JALAN_JALAN = 'Jalan-jalan';
     const APPRECIATION_STAYCATION = 'Staycation';
     const APPRECIATION_LIBUR = 'Libur';

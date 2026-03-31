@@ -38,6 +38,9 @@ class Detail extends Component
     public $agama;
     public $status_perkawinan;
     public $pendidikan_terakhir;
+    public $divisi;
+    public $nama_bank;
+    public $no_rekening;
 
     public $makanan;
     public $minuman;
@@ -93,6 +96,9 @@ class Detail extends Component
             $this->agama = $employee->agama;
             $this->status_perkawinan = $employee->status_perkawinan;
             $this->pendidikan_terakhir = $employee->pendidikan_terakhir;
+            $this->divisi = $employee->divisi;
+            $this->nama_bank = $employee->nama_bank;
+            $this->no_rekening = $employee->no_rekening;
 
             $this->makanan = $employee->makanan;
             $this->minuman = $employee->minuman;
