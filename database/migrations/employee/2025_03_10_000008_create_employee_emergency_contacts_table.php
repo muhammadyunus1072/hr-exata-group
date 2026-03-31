@@ -39,7 +39,7 @@ return new class extends Migration
         $table->string('nama')->nullable();
         $table->string('alamat')->nullable();
         $table->string('no_telp')->nullable();
-        $table->string('hubungan_keluarga')->nullale();
+        $table->string('hubungan_keluarga')->nullable();
 
         $table->bigInteger("created_by")->unsigned()->nullable();
         $table->bigInteger("updated_by")->unsigned()->nullable();
