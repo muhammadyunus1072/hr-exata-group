@@ -20,5 +20,7 @@ class RoleSeeder extends Seeder
                 $role->givePermissionTo(PermissionHelper::transform($access, $type));
             }
         }
+        $role = Role::create(['name' => "Karyawan"]);
+        $role->givePermissionTo(PermissionHelper::ACCESS_DASHBOARD . '.' . PermissionHelper::TYPE_READ);
     }
 }
