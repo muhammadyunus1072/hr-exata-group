@@ -57,7 +57,6 @@ class Profile extends Component
     // Contact Information
     public $no_telp_pribadi;
     public $no_telp_kantor;
-    public $email_pribadi;
 
     // Address Information
     public $alamat_domisili;
@@ -115,7 +114,6 @@ class Profile extends Component
         // Contact Information
         $this->no_telp_pribadi = $employee->no_telp_pribadi;
         $this->no_telp_kantor = $employee->no_telp_kantor;
-        $this->email_pribadi = $employee->email_pribadi;
 
         // Address Information
         $this->alamat_domisili = $employee->alamat_domisili;
@@ -291,7 +289,6 @@ class Profile extends Component
             // Contact Information
             'no_telp_pribadi' => $this->no_telp_pribadi,
             'no_telp_kantor' => $this->no_telp_kantor,
-            'email_pribadi' => $this->email_pribadi,
 
             // Address Information
             'alamat_domisili' => $this->alamat_domisili,

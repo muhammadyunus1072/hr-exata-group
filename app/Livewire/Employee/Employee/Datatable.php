@@ -127,6 +127,10 @@ class Datatable extends Component
                 'name' => 'Nama Karyawan',
             ],
             [
+                'key' => 'email',
+                'name' => 'Email Pribadi',
+            ],
+            [
                 'key' => 'nomor_identitas',
                 'name' => 'Nomor Identitas',
             ],
@@ -161,10 +165,6 @@ class Datatable extends Component
             [
                 'key' => 'no_telp_kantor',
                 'name' => 'No. Telp Kantor',
-            ],
-            [
-                'key' => 'email_pribadi',
-                'name' => 'Email Pribadi',
             ],
             [
                 'key' => 'alamat_domisili',

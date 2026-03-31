@@ -48,11 +48,13 @@ class User extends Authenticatable implements MustVerifyEmail
         'pendidikan_terakhir',
         'jenis_apresiasi',
         'keterangan_apresiasi',
+        'divisi',
+        'nama_bank',
+        'no_rekening',
 
         // Contact Information
         'no_telp_pribadi',
         'no_telp_kantor',
-        'email_pribadi',
 
         // Address Information
         'alamat_domisili',

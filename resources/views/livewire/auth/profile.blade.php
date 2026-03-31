@@ -372,15 +372,6 @@
                     @enderror
                 </div>
                 <div class="col-md-4 mb-3">
-                    <label>Email Pribadi</label>
-                    <input placeholder="Email Pribadi" type="email" wire:model="email_pribadi" class="form-control">
-
-                    @error('email_pribadi')
-                        <div class="text-danger">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                <div class="col-md-4 mb-3">
                     <label>Alamat Domisili</label>
                     <input placeholder="Alamat Domisili" type="text" wire:model="alamat_domisili" class="form-control">
 

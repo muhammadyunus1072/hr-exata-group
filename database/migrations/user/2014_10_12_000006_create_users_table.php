@@ -57,11 +57,13 @@ return new class extends Migration
         $table->string('agama')->nullable();
         $table->string('status_perkawinan')->nullable();
         $table->string('pendidikan_terakhir')->nullable();
+        $table->string('divisi')->nullable();
+        $table->string('nama_bank')->nullable();
+        $table->string('no_rekening')->nullable();
 
         // Contact Information
         $table->string('no_telp_pribadi')->nullable();
         $table->string('no_telp_kantor')->nullable();
-        $table->string('email_pribadi')->nullable();
 
         // Address Information
         $table->text('alamat_domisili')->nullable();
