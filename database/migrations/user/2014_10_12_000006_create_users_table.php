@@ -50,14 +50,13 @@ return new class extends Migration
         $table->string('nomor_karyawan')->nullable();
 
         // Personal Information
-        $table->string('nama_karyawan');
-        $table->string('nomor_identitas');
-        $table->string('tempat_lahir');
-        $table->date('tanggal_lahir');
-        $table->string('jenis_kelamin');
-        $table->string('agama');
-        $table->string('status_perkawinan');
-        $table->string('pendidikan_terakhir');
+        $table->string('nomor_identitas')->nullable();
+        $table->string('tempat_lahir')->nullable();
+        $table->date('tanggal_lahir')->nullable();
+        $table->string('jenis_kelamin')->nullable();
+        $table->string('agama')->nullable();
+        $table->string('status_perkawinan')->nullable();
+        $table->string('pendidikan_terakhir')->nullable();
 
         // Contact Information
         $table->string('no_telp_pribadi')->nullable();
@@ -69,7 +68,7 @@ return new class extends Migration
         $table->text('alamat_sesuai_ktp')->nullable();
 
         // Apresiasi
-        $table->string('jenis_apresiasi');
+        $table->string('jenis_apresiasi')->nullable();
         $table->text('keterangan_apresiasi')->nullable();
 
         $table->string('status')->nullable();

@@ -39,7 +39,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'nomor_karyawan',
 
         // Personal Information
-        'nama_karyawan',
         'nomor_identitas',
         'tempat_lahir',
         'tanggal_lahir',

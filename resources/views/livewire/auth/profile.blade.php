@@ -70,7 +70,6 @@
                         </div>
                     @enderror
                 </div>
-
                 <div class="col-md-12 mb-4">
                     <label>Password Baru</label>
                     <div class='fst-italic'>*Diisi jika ingin mengubah password</div>
