@@ -36,10 +36,10 @@ return new class extends Migration
         }
 
         $table->bigInteger('user_id')->unsigned();
-        $table->string('nama');
+        $table->string('nama')->nullable();
         $table->string('alamat')->nullable();
         $table->string('no_telp')->nullable();
-        $table->string('hubungan_keluarga');
+        $table->string('hubungan_keluarga')->nullale();
 
         $table->bigInteger("created_by")->unsigned()->nullable();
         $table->bigInteger("updated_by")->unsigned()->nullable();

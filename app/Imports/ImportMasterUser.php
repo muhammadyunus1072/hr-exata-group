@@ -31,11 +31,11 @@ class ImportMasterUser implements ToCollection
             $no_rekening = $row[12];
 
             $nama_dan_hubungan = explode(',', $nama_dan_hubungan);
-            $nama_kontak_darurat = isset($nama_dan_hubungan[0]) ?? null;
-            $hubungan_kontak_darurat = isset($nama_dan_hubungan[1]) ?? null;
+            $nama_kontak_darurat = isset($nama_dan_hubungan[0]) ? $nama_dan_hubungan[0] : null;
+            $hubungan_kontak_darurat = isset($nama_dan_hubungan[1]) ? $nama_dan_hubungan[1] : null;
             $nama_dan_hubungan_2 = explode(',', $nama_dan_hubungan_2);
-            $nama_kontak_darurat_2 = isset($nama_dan_hubungan_2[0]) ?? null;
-            $hubungan_kontak_darurat_2 = isset($nama_dan_hubungan_2[1]) ?? null;
+            $nama_kontak_darurat_2 = isset($nama_dan_hubungan_2[0]) ? $nama_dan_hubungan_2[0] : null;
+            $hubungan_kontak_darurat_2 = isset($nama_dan_hubungan_2[1]) ? $nama_dan_hubungan_2[1] : null;
 
             $data = [
                 'name' => $name,
