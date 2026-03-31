@@ -102,9 +102,9 @@
             <div class="row">
                 <div class="col-md-4 mb-3">
                     <label>Nama Lengkap</label>
-                    <input placeholder="Nama Lengkap" type="text" wire:model="nama_karyawan" class="form-control">
+                    <input placeholder="Nama Lengkap" type="text" wire:model="name" class="form-control">
 
-                    @error('nama_karyawan')
+                    @error('name')
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
