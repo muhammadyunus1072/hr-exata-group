@@ -123,7 +123,7 @@ class Datatable extends Component
                 'name' => 'Nomor Karyawan',
             ],
             [
-                'key' => 'nama_karyawan',
+                'key' => 'name',
                 'name' => 'Nama Karyawan',
             ],
             [
