@@ -40,7 +40,6 @@ class Profile extends Component
     public $nomor_karyawan;
 
     // Personal Information
-    public $nama_karyawan;
     public $nomor_identitas;
     public $tempat_lahir;
     public $tanggal_lahir;
@@ -99,7 +98,6 @@ class Profile extends Component
         $this->nomor_karyawan = $employee->nomor_karyawan;
 
         // Personal Information
-        $this->nama_karyawan = $employee->nama_karyawan;
         $this->nomor_identitas = $employee->nomor_identitas;
         $this->tempat_lahir = $employee->tempat_lahir;
         $this->tanggal_lahir = $employee->tanggal_lahir;
@@ -282,7 +280,6 @@ class Profile extends Component
             'nomor_karyawan' => $this->nomor_karyawan,
 
             // Personal Information
-            'nama_karyawan' => $this->nama_karyawan,
             'nomor_identitas' => $this->nomor_identitas,
             'tempat_lahir' => $this->tempat_lahir,
             'tanggal_lahir' => $this->tanggal_lahir,
