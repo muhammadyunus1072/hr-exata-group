@@ -50,11 +50,11 @@ class ImportMasterUser implements ToCollection
                 'no_rekening' => $no_rekening,
                 'password' => Hash::make('123exata'),
             ];
-            logger($data);
             $user = User::updateOrCreate(
                 ['email' => $email,],
                 $data
             );
+            $user->assignRole('Karyawan');
 
 
             EmployeeEmergencyContactRepository::create([
