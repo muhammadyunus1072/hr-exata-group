@@ -62,7 +62,7 @@
                     <label>Password Lama</label>
                     <div class='fst-italic'>*Diisi jika ingin mengubah password</div>
                     <input type="password" class="form-control @error('oldPassword') is-invalid @enderror"
-                        wire:model.blur="oldPassword" />
+                        wire:model.blur="oldPassword" autocomplete="new-password" />
 
                     @error('oldPassword')
                         <div class="invalid-feedback">
@@ -372,6 +372,66 @@
                     </div>
                     @endif
                 </div>
+                <div class="col-md-4 mb-2">
+                    <label>SIM A</label>
+                    <input type="file" wire:model="additional_sim_a" class="form-control">
+        
+                    @error('additional_sim_a')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                    @if($additional_sim_a_old)
+                    <div class="border rounded p-4 text-center bg-light">
+                        <i class="bi bi-file-earmark fs-1"></i>
+                        <div class="mt-2">
+                            {{ $additional_sim_a_old['name'] }}
+                        </div>
+
+                        <a href="{{ $additional_sim_a_old['url'] }}" download="{{$additional_sim_a_old['name']}}" target="_blank" class="btn btn-sm btn-primary mt-2">
+                            Download
+                        </a>
+                    </div>
+                    @endif
+                </div>
+                <div class="col-md-4 mb-2">
+                    <label>SIM C</label>
+                    <input type="file" wire:model="additional_sim_c" class="form-control">
+        
+                    @error('additional_sim_c')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                    @if($additional_sim_c_old)
+                    <div class="border rounded p-4 text-center bg-light">
+                        <i class="bi bi-file-earmark fs-1"></i>
+                        <div class="mt-2">
+                            {{ $additional_sim_c_old['name'] }}
+                        </div>
+
+                        <a href="{{ $additional_sim_c_old['url'] }}" download="{{$additional_sim_c_old['name']}}" target="_blank" class="btn btn-sm btn-primary mt-2">
+                            Download
+                        </a>
+                    </div>
+                    @endif
+                </div>
+                <div class="col-md-4 mb-2">
+                    <label>KARTU AXA MANDIRI</label>
+                    <input type="file" wire:model="additional_kartu_axa_mandiri" class="form-control">
+        
+                    @error('additional_kartu_axa_mandiri')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                    @if($additional_kartu_axa_mandiri_old)
+                    <div class="border rounded p-4 text-center bg-light">
+                        <i class="bi bi-file-earmark fs-1"></i>
+                        <div class="mt-2">
+                            {{ $additional_kartu_axa_mandiri_old['name'] }}
+                        </div>
+
+                        <a href="{{ $additional_kartu_axa_mandiri_old['url'] }}" download="{{$additional_kartu_axa_mandiri_old['name']}}" target="_blank" class="btn btn-sm btn-primary mt-2">
+                            Download
+                        </a>
+                    </div>
+                    @endif
+                </div>
             </div>
         </div>
         <div wire:ignore.self class="tab-pane fade" id="kontak-tab-pane" role="tabpanel" aria-labelledby="kontak-tab" tabindex="0">
@@ -383,6 +443,14 @@
                     <input placeholder="No. Telp Pribadi" type="text" wire:model="no_telp_pribadi" class="form-control">
 
                     @error('no_telp_pribadi')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label>Email Pribadi</label>
+                    <input placeholder="Email Pribadi" type="text" wire:model="email" class="form-control">
+
+                    @error('email')
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>

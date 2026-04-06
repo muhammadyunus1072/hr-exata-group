@@ -2,18 +2,18 @@
 
 namespace App\Repositories\Employee;
 
-use App\Models\Employee\EmployeeOfficeEmail;
+use App\Models\Employee\EmployeeCareerHistory;
 use App\Repositories\MasterDataRepository;
 
-class EmployeeOfficeEmailRepository extends MasterDataRepository
+class EmployeeCareerHistoryRepository extends MasterDataRepository
 {
     protected static function className(): string
     {
-        return EmployeeOfficeEmail::class;
+        return EmployeeCareerHistory::class;
     }
 
     public static function datatable()
     {
-        return EmployeeOfficeEmail::query();
+        return EmployeeCareerHistory::query();
     }
 }

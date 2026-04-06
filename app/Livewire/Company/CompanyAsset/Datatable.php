@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Livewire\Employee\Employee;
+namespace App\Livewire\Company\CompanyAsset;
 
 use App\Helpers\Alert;
 use App\Helpers\PermissionHelper;
 use App\Repositories\Account\UserRepository;
+use App\Repositories\Company\CompanyAssetRepository;
 use App\Traits\Livewire\WithDatatable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
@@ -26,8 +27,8 @@ class Datatable extends Component
     public function onMount()
     {
         $authUser = UserRepository::authenticatedUser();
-        $this->isCanUpdate = $authUser->hasPermissionTo(PermissionHelper::transform(PermissionHelper::ACCESS_EMPLOYEE, PermissionHelper::TYPE_UPDATE));
-        $this->isCanDelete = $authUser->hasPermissionTo(PermissionHelper::transform(PermissionHelper::ACCESS_EMPLOYEE, PermissionHelper::TYPE_DELETE));
+        $this->isCanUpdate = $authUser->hasPermissionTo(PermissionHelper::transform(PermissionHelper::ACCESS_COMPANY_ASSET, PermissionHelper::TYPE_UPDATE));
+        $this->isCanDelete = $authUser->hasPermissionTo(PermissionHelper::transform(PermissionHelper::ACCESS_COMPANY_ASSET, PermissionHelper::TYPE_DELETE));
     }
 
     #[On('on-delete-dialog-confirm')]
@@ -37,7 +38,7 @@ class Datatable extends Component
             return;
         }
 
-        UserRepository::delete($this->targetDeleteId);
+        CompanyAssetRepository::delete($this->targetDeleteId);
         Alert::success($this, 'Berhasil', 'Data berhasil dihapus');
     }
 
@@ -81,7 +82,7 @@ class Datatable extends Component
                     $editHtml = "";
                     $id = Crypt::encrypt($item->id);
                     if ($this->isCanUpdate) {
-                        $editUrl = route('employee.edit', $id);
+                        $editUrl = route('company_asset.edit', $id);
                         $editHtml = "<div class='col-auto mb-2'>
                             <a class='btn btn-primary btn-sm' href='$editUrl'>
                                 <i class='ki-duotone ki-notepad-edit fs-1'>
@@ -119,67 +120,30 @@ class Datatable extends Component
                 },
             ],
             [
-                'key' => 'nomor_karyawan',
-                'name' => 'Nomor Karyawan',
+                'key' => 'nama_barang',
+                'name' => 'Nama Barang',
             ],
             [
-                'key' => 'name',
-                'name' => 'Nama Karyawan',
+                'key' => 'serial_number',
+                'name' => 'Nomor Seri',
             ],
             [
-                'key' => 'email',
-                'name' => 'Email Pribadi',
+                'key' => 'brand',
+                'name' => 'Brand',
             ],
             [
-                'key' => 'nomor_identitas',
-                'name' => 'Nomor Identitas',
+                'key' => 'status_kondisi',
+                'name' => 'Status Kondisi',
             ],
             [
-                'key' => 'tempat_lahir',
-                'name' => 'Tempat Lahir',
+                'key' => 'divisi',
+                'name' => 'Divisi',
             ],
             [
-                'key' => 'tanggal_lahir',
-                'name' => 'Tanggal Lahir',
-            ],
-            [
-                'key' => 'jenis_kelamin',
-                'name' => 'Jenis Kelamin',
-            ],
-            [
-                'key' => 'agama',
-                'name' => 'Agama',
-            ],
-            [
-                'key' => 'status_perkawinan',
-                'name' => 'Status Perkawianan',
-            ],
-            [
-                'key' => 'pendidikan_terakhir',
-                'name' => 'Pendidikan Terakhir',
-            ],
-            [
-                'key' => 'no_telp_pribadi',
-                'name' => 'No. Telp Pribadi',
-            ],
-            [
-                'key' => 'no_telp_kantor',
-                'name' => 'No. Telp Kantor',
-            ],
-            [
-                'key' => 'alamat_domisili',
-                'name' => 'Alamat Domisili',
-            ],
-            [
-                'key' => 'alamat_sesuai_ktp',
-                'name' => 'Alamat Sesuai KTP',
-            ],
-            [
-                'sortable' => false,
-                'searchable' => false,
-                'name' => 'Status',
+                'key' => 'assigned_user_id',
+                'name' => 'Pengguna saat ini',
                 'render' => function ($item) {
-                    return is_null($item->tanggal_keluar) ? 'Aktif' : 'Tidak Aktif';
+                    return $item->assigned_user_id ? $item->assignedUser->name : 'Belum ada pengguna';
                 }
             ],
         ];
@@ -187,11 +151,11 @@ class Datatable extends Component
 
     public function getQuery(): Builder
     {
-        return UserRepository::datatable(null);
+        return CompanyAssetRepository::datatable(null);
     }
 
     public function getView(): string
     {
-        return 'livewire.employee.employee.datatable';
+        return 'livewire.company.company-asset.datatable';
     }
 }

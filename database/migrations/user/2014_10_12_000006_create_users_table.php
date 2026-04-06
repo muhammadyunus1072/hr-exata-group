@@ -57,6 +57,9 @@ return new class extends Migration
         $table->string('agama')->nullable();
         $table->string('status_perkawinan')->nullable();
         $table->string('pendidikan_terakhir')->nullable();
+        $table->string('keterangan_pendidikan_terakhir')->nullable();
+        $table->string('golongan_darah')->nullable();
+        $table->string('zodiac')->nullable();
         $table->string('divisi')->nullable();
         $table->string('nama_bank')->nullable();
         $table->string('no_rekening')->nullable();
@@ -64,6 +67,7 @@ return new class extends Migration
         // Contact Information
         $table->string('no_telp_pribadi')->nullable();
         $table->string('no_telp_kantor')->nullable();
+        $table->date('tenggat_waktu_pembayaran')->nullable();
 
         // Address Information
         $table->text('alamat_domisili')->nullable();
@@ -73,7 +77,10 @@ return new class extends Migration
         $table->string('jenis_apresiasi')->nullable();
         $table->text('keterangan_apresiasi')->nullable();
 
-        $table->string('status')->nullable();
+        $table->date('tanggal_masuk')->nullable();
+        $table->date('tanggal_keluar')->nullable();
+        $table->text('alasan_keluar')->nullable();
+        $table->bigInteger("last_employee_career_id")->unsigned()->nullable();
 
         $table->bigInteger("created_by")->unsigned()->nullable();
         $table->bigInteger("updated_by")->unsigned()->nullable();

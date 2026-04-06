@@ -8,11 +8,12 @@ use App\Models\Employee\Employee;
 use App\Models\User;
 use App\Repositories\Account\UserRepository;
 use App\Repositories\Employee\EmployeeAdditionalInformationRepository;
+use App\Repositories\Employee\EmployeeAdministrativeCareerRepository;
 use App\Repositories\Employee\EmployeeDrinkRepository;
 use App\Repositories\Employee\EmployeeEmergencyContactRepository;
 use App\Repositories\Employee\EmployeeFoodRepository;
 use App\Repositories\Employee\EmployeeHobbyRepository;
-use App\Repositories\Employee\EmployeeOfficeEmailRepository;
+use App\Repositories\Employee\EmployeeCompanyAccountRepository;
 use Exception;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
@@ -34,10 +35,13 @@ class Detail extends Component
     public $nomor_identitas;
     public $tempat_lahir;
     public $tanggal_lahir;
+    public $zodiac;
     public $jenis_kelamin;
     public $agama;
     public $status_perkawinan;
     public $pendidikan_terakhir;
+    public $keterangan_pendidikan_terakhir;
+    public $golongan_darah = User::GOLONGAN_DARAH_TIDAK_DIKETAHUI;
     public $divisi;
     public $nama_bank;
     public $no_rekening;
@@ -50,14 +54,13 @@ class Detail extends Component
 
     // Contact Information
     public $no_telp_pribadi;
+    public $email;
     public $no_telp_kantor;
+    public $tenggat_waktu_pembayaran;
 
     // Address Information
     public $alamat_domisili;
     public $alamat_sesuai_ktp;
-
-    public $email_kantors = [];
-    public $email_kantor_removes = [];
 
     // Additional Information
     public $additional_kk;
@@ -66,6 +69,9 @@ class Detail extends Component
     public $additional_bpjs_tk;
     public $additional_ktp;
     public $additional_npwp;
+    public $additional_sim_a;
+    public $additional_sim_c;
+    public $additional_kartu_axa_mandiri;
 
     public $additional_kk_old;
     public $additional_akta_kelahiran_old;
@@ -73,12 +79,29 @@ class Detail extends Component
     public $additional_bpjs_tk_old;
     public $additional_ktp_old;
     public $additional_npwp_old;
+    public $additional_sim_a_old;
+    public $additional_sim_c_old;
+    public $additional_kartu_axa_mandiri_old;
 
     public $status = false;
 
     // Emergency Contact
     public $emergency_contacts = [];
     public $emergency_contact_removes = [];
+
+    // Administration Career
+    public $tanggal_masuk;
+    public $tanggal_keluar;
+    public $alasan_keluar;
+    public $administration_careers = [];
+    public $administration_career_removes = [];
+
+    // Company Account
+    public $company_accounts = [];
+    public $company_account_removes = [];
+
+    // Company Asset
+    public $company_assets = [];
 
     public function mount()
     {
@@ -92,10 +115,13 @@ class Detail extends Component
             $this->nomor_identitas = $employee->nomor_identitas;
             $this->tempat_lahir = $employee->tempat_lahir;
             $this->tanggal_lahir = $employee->tanggal_lahir;
+            $this->zodiac = $employee->zodiac ?? '-';
             $this->jenis_kelamin = $employee->jenis_kelamin;
             $this->agama = $employee->agama;
             $this->status_perkawinan = $employee->status_perkawinan;
             $this->pendidikan_terakhir = $employee->pendidikan_terakhir;
+            $this->keterangan_pendidikan_terakhir = $employee->keterangan_pendidikan_terakhir;
+            $this->golongan_darah = $employee->golongan_darah;
             $this->divisi = $employee->divisi;
             $this->nama_bank = $employee->nama_bank;
             $this->no_rekening = $employee->no_rekening;
@@ -109,17 +135,36 @@ class Detail extends Component
             // Contact Information
             $this->no_telp_pribadi = $employee->no_telp_pribadi;
             $this->no_telp_kantor = $employee->no_telp_kantor;
+            $this->email = $employee->email;
+            $this->tenggat_waktu_pembayaran = $employee->tenggat_waktu_pembayaran;
 
             // Address Information
             $this->alamat_domisili = $employee->alamat_domisili;
             $this->alamat_sesuai_ktp = $employee->alamat_sesuai_ktp;
 
-            foreach ($employee->employeeOfficeEmails as $email) {
+            // Administration Careed
+            $this->tanggal_masuk = $employee->tanggal_masuk;
+            $this->tanggal_keluar = $employee->tanggal_keluar;
+            $this->alasan_keluar = $employee->alasan_keluar;
 
-                $this->email_kantors[] = [
-                    'id' => Crypt::encrypt($email->id),
-                    'email' => $email->email,
-                    'password' => $email->password,
+            foreach ($employee->employeeAdministrativeCareers as $administrative_career) {
+                $this->administration_careers[] = [
+                    'id' => Crypt::encrypt($administrative_career->id),
+                    'nama_dokumen' => $administrative_career->nama_dokumen,
+                    'file' => $administrative_career->file,
+                    'deskripsi' => $administrative_career->deskripsi,
+                    'url' => Storage::url($administrative_career->file),
+                ];
+            }
+
+            foreach ($employee->employeeCompanyAccounts as $account) {
+
+                $this->company_accounts[] = [
+                    'id' => Crypt::encrypt($account->id),
+                    'platform' => $account->platform,
+                    'username' => $account->username,
+                    'password' => $account->password,
+                    'catatan' => $account->catatan,
                 ];
             }
             foreach ($employee->employeeEmergencyContacts as $contact) {
@@ -130,6 +175,21 @@ class Detail extends Component
                     'alamat' => $contact->alamat,
                     'no_telp' => $contact->no_telp,
                     'hubungan_keluarga' => $contact->hubungan_keluarga,
+                ];
+            }
+            foreach ($employee->companyAssets as $asset) {
+
+                $this->company_assets[] = [
+                    'id' => Crypt::encrypt($contact->id),
+                    'assigned_at' => $asset->assigned_at,
+                    'nama_barang' => $asset->nama_barang,
+                    'serial_number' => $asset->serial_number,
+                    'status_barang' => $asset->status_barang,
+                    'status_kondisi' => $asset->status_kondisi,
+                    'status_pembelian' => $asset->status_pembelian,
+                    'divisi' => $asset->divisi,
+                    'brand' => $asset->brand,
+                    'keterangan' => $asset->keterangan,
                 ];
             }
 
@@ -261,6 +321,28 @@ class Detail extends Component
                 ];
             }
 
+            if ($employee->employeeAdditionalInformationSimA) {
+
+                $this->additional_sim_a_old = [
+                    'name' => $employee->employeeAdditionalInformationSimA->nama_dokumen,
+                    'url' => Storage::url($employee->employeeAdditionalInformationSimA->file)
+                ];
+            }
+            if ($employee->employeeAdditionalInformationSimC) {
+
+                $this->additional_sim_c_old = [
+                    'name' => $employee->employeeAdditionalInformationSimC->nama_dokumen,
+                    'url' => Storage::url($employee->employeeAdditionalInformationSimC->file)
+                ];
+            }
+            if ($employee->employeeAdditionalInformationKartuAxaMandiri) {
+
+                $this->additional_kartu_axa_mandiri_old = [
+                    'name' => $employee->employeeAdditionalInformationKartuAxaMandiri->nama_dokumen,
+                    'url' => Storage::url($employee->employeeAdditionalInformationKartuAxaMandiri->file)
+                ];
+            }
+
             $this->status = $employee->status == User::STATUS_ACTIVE ? true : false;
         } else {
 
@@ -336,102 +418,98 @@ class Detail extends Component
         unset($this->emergency_contacts[$index]);
     }
 
+    public function addAdministrationCareer()
+    {
+        $this->administration_careers[] = [
+            'id' => '',
+            'nama_dokumen' => '',
+            'deskripsi' => '',
+            'file' => '',
+            'url' => '',
+        ];
+    }
+
+    public function removeAdministrationCareer($index)
+    {
+
+        if ($this->administration_careers[$index]['id']) {
+            $this->administration_career_removes[] = $this->administration_careers[$index]['id'];
+        }
+        unset($this->administration_careers[$index]);
+    }
+
+    public function addCompanyAccount()
+    {
+        $this->company_accounts[] = [
+            'id' => '',
+            'platform' => '',
+            'username' => '',
+            'password' => '',
+            'catatan' => '',
+        ];
+    }
+
+    public function removeCompanyAccount($index)
+    {
+
+        if ($this->company_accounts[$index]['id']) {
+            $this->company_account_removes[] = $this->company_accounts[$index]['id'];
+        }
+        unset($this->company_accounts[$index]);
+    }
+
     public function store()
     {
         try {
             DB::transaction(function () {
                 $employee_id = null;
+                $validateData = [
+                    'nomor_karyawan' => $this->nomor_karyawan,
+
+                    // Personal Information
+                    'username' => $this->nama_karyawan,
+                    'name' => $this->nama_karyawan,
+                    'nomor_identitas' => $this->nomor_identitas,
+                    'tempat_lahir' => $this->tempat_lahir,
+                    'tanggal_lahir' => $this->tanggal_lahir,
+                    'jenis_kelamin' => $this->jenis_kelamin,
+                    'agama' => $this->agama,
+                    'status_perkawinan' => $this->status_perkawinan,
+                    'pendidikan_terakhir' => $this->pendidikan_terakhir,
+                    'keterangan_pendidikan_terakhir' => $this->keterangan_pendidikan_terakhir,
+                    'golongan_darah' => $this->golongan_darah,
+
+                    // Contact Information
+                    'no_telp_pribadi' => $this->no_telp_pribadi,
+                    'no_telp_kantor' => $this->no_telp_kantor,
+                    'tenggat_waktu_pembayaran' => $this->tenggat_waktu_pembayaran,
+                    'email' => $this->email,
+                    'password' => User::PASSWORD_DEFAULT,
+
+                    // Address Information
+                    'alamat_domisili' => $this->alamat_domisili,
+                    'alamat_sesuai_ktp' => $this->alamat_sesuai_ktp,
+
+                    'makanan' => $this->makanan,
+                    'minuman' => $this->minuman,
+                    'hobi' => $this->hobi,
+                    'jenis_apresiasi' => $this->jenis_apresiasi,
+                    'keterangan_apresiasi' => $this->keterangan_apresiasi,
+                    'status' => $this->status ? User::STATUS_ACTIVE : User::STATUS_NON_ACTIVE,
+
+                    // Administration Careed
+                    'tanggal_masuk' => $this->tanggal_masuk,
+                    'tanggal_keluar' => $this->tanggal_keluar,
+                    'alasan_keluar' => $this->alasan_keluar,
+                ];
                 if ($this->objId) {
-                    // Vehicle
-                    $validateData = [
-                        'nomor_karyawan' => $this->nomor_karyawan,
 
-                        // Personal Information
-                        'nama_karyawan' => $this->nama_karyawan,
-                        'nomor_identitas' => $this->nomor_identitas,
-                        'tempat_lahir' => $this->tempat_lahir,
-                        'tanggal_lahir' => $this->tanggal_lahir,
-                        'jenis_kelamin' => $this->jenis_kelamin,
-                        'agama' => $this->agama,
-                        'status_perkawinan' => $this->status_perkawinan,
-                        'pendidikan_terakhir' => $this->pendidikan_terakhir,
-
-                        // Contact Information
-                        'no_telp_pribadi' => $this->no_telp_pribadi,
-                        'no_telp_kantor' => $this->no_telp_kantor,
-
-                        // Address Information
-                        'alamat_domisili' => $this->alamat_domisili,
-                        'alamat_sesuai_ktp' => $this->alamat_sesuai_ktp,
-
-                        'makanan' => $this->makanan,
-                        'minuman' => $this->minuman,
-                        'hobi' => $this->hobi,
-                        'jenis_apresiasi' => $this->jenis_apresiasi,
-                        'keterangan_apresiasi' => $this->keterangan_apresiasi,
-                        'status' => $this->status ? User::STATUS_ACTIVE : User::STATUS_NON_ACTIVE,
-                    ];
                     $user_id = Crypt::decrypt($this->objId);
                     UserRepository::update($user_id, $validateData);
                 } else {
-                    // Vehicle
-                    $validateData = [
-
-                        'nomor_karyawan' => $this->nomor_karyawan,
-
-                        // Personal Information
-                        'nama_karyawan' => $this->nama_karyawan,
-                        'username' => $this->nama_karyawan,
-                        'name' => $this->nama_karyawan,
-                        'nomor_identitas' => $this->nomor_identitas,
-                        'tempat_lahir' => $this->tempat_lahir,
-                        'tanggal_lahir' => $this->tanggal_lahir,
-                        'jenis_kelamin' => $this->jenis_kelamin,
-                        'agama' => $this->agama,
-                        'status_perkawinan' => $this->status_perkawinan,
-                        'pendidikan_terakhir' => $this->pendidikan_terakhir,
-
-                        // Contact Information
-                        'no_telp_pribadi' => $this->no_telp_pribadi,
-                        'no_telp_kantor' => $this->no_telp_kantor,
-                        'email' => $this->email_pribadi,
-                        'password' => User::PASSWORD_DEFAULT,
-
-                        // Address Information
-                        'alamat_domisili' => $this->alamat_domisili,
-                        'alamat_sesuai_ktp' => $this->alamat_sesuai_ktp,
-
-                        'makanan' => $this->makanan,
-                        'minuman' => $this->minuman,
-                        'hobi' => $this->hobi,
-                        'jenis_apresiasi' => $this->jenis_apresiasi,
-                        'keterangan_apresiasi' => $this->keterangan_apresiasi,
-                        'status' => $this->status ? User::STATUS_ACTIVE : User::STATUS_NON_ACTIVE,
-                    ];
-                    $this->dispatch('consoleLog', $validateData);
 
                     $user = UserRepository::create($validateData);
                     $user_id = $user->id;
-                }
-
-                foreach ($this->email_kantors as $mail) {
-                    $validatedOfficeEmail = [
-                        'user_id' => $user_id,
-                        'email' => $mail['email'],
-                        'password' => $mail['password'],
-                    ];
-                    $this->dispatch('consoleLog', $validatedOfficeEmail);
-                    if ($mail['id']) {
-
-                        EmployeeOfficeEmailRepository::update(Crypt::decrypt($mail['id']), $validatedOfficeEmail);
-                    } else {
-
-                        EmployeeOfficeEmailRepository::create($validatedOfficeEmail);
-                    }
-                }
-
-                foreach ($this->email_kantor_removes as $email_remove) {
-                    EmployeeOfficeEmailRepository::delete(Crypt::decrypt($email_remove));
                 }
 
                 foreach ($this->emergency_contacts as $mail) {
@@ -572,6 +650,107 @@ class Detail extends Component
                     ];
                     $this->dispatch('consoleLog', $validatedAdditional);
                     EmployeeAdditionalInformationRepository::create($validatedAdditional);
+                }
+                // SIM A //
+                if ($this->additional_sim_a) {
+
+                    $path = $this->additional_sim_a->store(FilePathHelper::FILE_EMPLOYEE_ADDITIONAL_INFORMATION, 'public');
+                    $validatedAdditional = [
+                        'user_id' => $user_id,
+                        'file' => $path,
+                        'deskripsi' => User::ADDITIONAL_INFORMATION_SIM_A,
+                        'nama_dokumen' => $this->additional_sim_a->getClientOriginalName()
+                    ];
+                    $this->dispatch('consoleLog', $validatedAdditional);
+                    EmployeeAdditionalInformationRepository::create($validatedAdditional);
+                }
+                // SIM C //
+                if ($this->additional_sim_c) {
+
+                    $path = $this->additional_sim_c->store(FilePathHelper::FILE_EMPLOYEE_ADDITIONAL_INFORMATION, 'public');
+                    $validatedAdditional = [
+                        'user_id' => $user_id,
+                        'file' => $path,
+                        'deskripsi' => User::ADDITIONAL_INFORMATION_SIM_C,
+                        'nama_dokumen' => $this->additional_sim_c->getClientOriginalName()
+                    ];
+                    $this->dispatch('consoleLog', $validatedAdditional);
+                    EmployeeAdditionalInformationRepository::create($validatedAdditional);
+                }
+                // SIM A //
+                if ($this->additional_kartu_axa_mandiri) {
+
+                    $path = $this->additional_kartu_axa_mandiri->store(FilePathHelper::FILE_EMPLOYEE_ADDITIONAL_INFORMATION, 'public');
+                    $validatedAdditional = [
+                        'user_id' => $user_id,
+                        'file' => $path,
+                        'deskripsi' => User::ADDITIONAL_INFORMATION_KARTU_AXA_MANDIRI,
+                        'nama_dokumen' => $this->additional_kartu_axa_mandiri->getClientOriginalName()
+                    ];
+                    $this->dispatch('consoleLog', $validatedAdditional);
+                    EmployeeAdditionalInformationRepository::create($validatedAdditional);
+                }
+                // Administration Career
+                foreach ($this->administration_careers as $administration_career) {
+
+                    $data = [
+                        'user_id'   => $user_id,
+                        'deskripsi' => $administration_career['deskripsi'],
+                    ];
+
+                    /**
+                     * Upload file jika ada file baru
+                     */
+                    if (
+                        !empty($administration_career['file'])
+                        && $administration_career['file'] instanceof \Livewire\Features\SupportFileUploads\TemporaryUploadedFile
+                    ) {
+
+                        $path = $administration_career['file']
+                            ->store(FilePathHelper::FILE_EMPLOYEE_ADDITIONAL_INFORMATION, 'public');
+
+                        $data['file'] = $path;
+                        $data['nama_dokumen'] = $administration_career['file']->getClientOriginalName();
+                    }
+
+                    /**
+                     * Update atau Create
+                     */
+                    if ($administration_career['id']) {
+
+                        EmployeeAdministrativeCareerRepository::update(
+                            Crypt::decrypt($administration_career['id']),
+                            $data
+                        );
+                    } else {
+                        EmployeeAdministrativeCareerRepository::create($data);
+                    }
+                }
+
+                foreach ($this->administration_career_removes as $item) {
+                    EmployeeAdministrativeCareerRepository::delete(Crypt::decrypt($item));
+                }
+
+                // Company Account 
+
+                foreach ($this->company_accounts as $mail) {
+                    $validatedData = [
+                        'user_id' => $user_id,
+                        'platform' => $mail['platform'],
+                        'username' => $mail['username'],
+                        'password' => $mail['password'],
+                        'catatan' => $mail['catatan'],
+                    ];
+                    $this->dispatch('consoleLog', $validatedData);
+                    if ($mail['id']) {
+                        EmployeeCompanyAccountRepository::update(Crypt::decrypt($mail['id']), $validatedData);
+                    } else {
+                        EmployeeCompanyAccountRepository::create($validatedData);
+                    }
+                }
+
+                foreach ($this->company_account_removes as $acount_remove) {
+                    EmployeeCompanyAccountRepository::delete(Crypt::decrypt($acount_remove));
                 }
             });
 

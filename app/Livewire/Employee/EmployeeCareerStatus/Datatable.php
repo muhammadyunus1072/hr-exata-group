@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Livewire\Employee\Employee;
+namespace App\Livewire\Employee\EmployeeCareerStatus;
 
 use App\Helpers\Alert;
 use App\Helpers\PermissionHelper;
 use App\Repositories\Account\UserRepository;
+use App\Repositories\Employee\EmployeeCareerStatusRepository;
 use App\Traits\Livewire\WithDatatable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
@@ -26,8 +27,9 @@ class Datatable extends Component
     public function onMount()
     {
         $authUser = UserRepository::authenticatedUser();
-        $this->isCanUpdate = $authUser->hasPermissionTo(PermissionHelper::transform(PermissionHelper::ACCESS_EMPLOYEE, PermissionHelper::TYPE_UPDATE));
-        $this->isCanDelete = $authUser->hasPermissionTo(PermissionHelper::transform(PermissionHelper::ACCESS_EMPLOYEE, PermissionHelper::TYPE_DELETE));
+        $this->isCanUpdate = $authUser->hasPermissionTo(PermissionHelper::transform(PermissionHelper::ACCESS_EMPLOYEE_CAREER_STATUS, PermissionHelper::TYPE_UPDATE));
+        $this->isCanDelete = $authUser->hasPermissionTo(PermissionHelper::transform(PermissionHelper::ACCESS_EMPLOYEE_CAREER_STATUS, PermissionHelper::TYPE_DELETE));
+        $this->sortBy = 'level';
     }
 
     #[On('on-delete-dialog-confirm')]
@@ -37,7 +39,7 @@ class Datatable extends Component
             return;
         }
 
-        UserRepository::delete($this->targetDeleteId);
+        EmployeeCareerStatusRepository::delete($this->targetDeleteId);
         Alert::success($this, 'Berhasil', 'Data berhasil dihapus');
     }
 
@@ -81,7 +83,7 @@ class Datatable extends Component
                     $editHtml = "";
                     $id = Crypt::encrypt($item->id);
                     if ($this->isCanUpdate) {
-                        $editUrl = route('employee.edit', $id);
+                        $editUrl = route('employee_career_status.edit', $id);
                         $editHtml = "<div class='col-auto mb-2'>
                             <a class='btn btn-primary btn-sm' href='$editUrl'>
                                 <i class='ki-duotone ki-notepad-edit fs-1'>
@@ -119,75 +121,19 @@ class Datatable extends Component
                 },
             ],
             [
-                'key' => 'nomor_karyawan',
-                'name' => 'Nomor Karyawan',
-            ],
-            [
                 'key' => 'name',
-                'name' => 'Nama Karyawan',
+                'name' => 'Nama Jenjang Karir',
             ],
             [
-                'key' => 'email',
-                'name' => 'Email Pribadi',
-            ],
-            [
-                'key' => 'nomor_identitas',
-                'name' => 'Nomor Identitas',
-            ],
-            [
-                'key' => 'tempat_lahir',
-                'name' => 'Tempat Lahir',
-            ],
-            [
-                'key' => 'tanggal_lahir',
-                'name' => 'Tanggal Lahir',
-            ],
-            [
-                'key' => 'jenis_kelamin',
-                'name' => 'Jenis Kelamin',
-            ],
-            [
-                'key' => 'agama',
-                'name' => 'Agama',
-            ],
-            [
-                'key' => 'status_perkawinan',
-                'name' => 'Status Perkawianan',
-            ],
-            [
-                'key' => 'pendidikan_terakhir',
-                'name' => 'Pendidikan Terakhir',
-            ],
-            [
-                'key' => 'no_telp_pribadi',
-                'name' => 'No. Telp Pribadi',
-            ],
-            [
-                'key' => 'no_telp_kantor',
-                'name' => 'No. Telp Kantor',
-            ],
-            [
-                'key' => 'alamat_domisili',
-                'name' => 'Alamat Domisili',
-            ],
-            [
-                'key' => 'alamat_sesuai_ktp',
-                'name' => 'Alamat Sesuai KTP',
-            ],
-            [
-                'sortable' => false,
-                'searchable' => false,
-                'name' => 'Status',
-                'render' => function ($item) {
-                    return is_null($item->tanggal_keluar) ? 'Aktif' : 'Tidak Aktif';
-                }
+                'key' => 'level',
+                'name' => 'Level',
             ],
         ];
     }
 
     public function getQuery(): Builder
     {
-        return UserRepository::datatable(null);
+        return EmployeeCareerStatusRepository::datatable(null);
     }
 
     public function getView(): string

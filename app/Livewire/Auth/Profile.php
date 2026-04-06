@@ -60,6 +60,7 @@ class Profile extends Component
     // Contact Information
     public $no_telp_pribadi;
     public $no_telp_kantor;
+    public $tenggat_waktu_pembayaran;
 
     // Address Information
     public $alamat_domisili;
@@ -75,6 +76,9 @@ class Profile extends Component
     public $additional_bpjs_tk;
     public $additional_ktp;
     public $additional_npwp;
+    public $additional_sim_a;
+    public $additional_sim_c;
+    public $additional_kartu_axa_mandiri;
 
     public $additional_kk_old;
     public $additional_akta_kelahiran_old;
@@ -82,6 +86,9 @@ class Profile extends Component
     public $additional_bpjs_tk_old;
     public $additional_ktp_old;
     public $additional_npwp_old;
+    public $additional_sim_a_old;
+    public $additional_sim_c_old;
+    public $additional_kartu_axa_mandiri_old;
 
     public $status = false;
 
@@ -120,6 +127,7 @@ class Profile extends Component
         // Contact Information
         $this->no_telp_pribadi = $employee->no_telp_pribadi;
         $this->no_telp_kantor = $employee->no_telp_kantor;
+        $this->tenggat_waktu_pembayaran = $employee->tenggat_waktu_pembayaran;
 
         // Address Information
         $this->alamat_domisili = $employee->alamat_domisili;
@@ -271,8 +279,68 @@ class Profile extends Component
                 'url' => Storage::url($employee->employeeAdditionalInformationNPWP->file)
             ];
         }
+        if ($employee->employeeAdditionalInformationSimA) {
+
+            $this->additional_sim_a_old = [
+                'name' => $employee->employeeAdditionalInformationSimA->nama_dokumen,
+                'url' => Storage::url($employee->employeeAdditionalInformationSimA->file)
+            ];
+        }
+        if ($employee->employeeAdditionalInformationSimC) {
+
+            $this->additional_sim_c_old = [
+                'name' => $employee->employeeAdditionalInformationSimC->nama_dokumen,
+                'url' => Storage::url($employee->employeeAdditionalInformationSimC->file)
+            ];
+        }
+        if ($employee->employeeAdditionalInformationKartuAxaMandiri) {
+
+            $this->additional_kartu_axa_mandiri_old = [
+                'name' => $employee->employeeAdditionalInformationKartuAxaMandiri->nama_dokumen,
+                'url' => Storage::url($employee->employeeAdditionalInformationKartuAxaMandiri->file)
+            ];
+        }
 
         $this->status = $employee->status == User::STATUS_ACTIVE ? true : false;
+    }
+
+
+    public function addEmailKantor()
+    {
+        $this->email_kantors[] = [
+            'id' => '',
+            'email' => '',
+            'password' => ''
+        ];
+    }
+
+    public function removeEmailKantor($index)
+    {
+
+        if ($this->email_kantors[$index]['id']) {
+            $this->email_kantor_removes[] = $this->email_kantors[$index]['id'];
+        }
+        unset($this->email_kantors[$index]);
+    }
+
+    public function addEmergencyContact()
+    {
+        $this->emergency_contacts[] = [
+            'id' => '',
+            'name' => '',
+            'alamat' => '',
+            'no_telp' => '',
+            'hubungan_keluarga' => ''
+        ];
+    }
+
+    public function removeEmergencyContact($index)
+    {
+
+        if ($this->emergency_contacts[$index]['id']) {
+            $this->emergency_contact_removes[] = $this->emergency_contacts[$index]['id'];
+        }
+        unset($this->emergency_contacts[$index]);
     }
 
     public function store()
@@ -295,6 +363,7 @@ class Profile extends Component
             // Contact Information
             'no_telp_pribadi' => $this->no_telp_pribadi,
             'no_telp_kantor' => $this->no_telp_kantor,
+            'tenggat_waktu_pembayaran' => $this->tenggat_waktu_pembayaran,
 
             // Address Information
             'alamat_domisili' => $this->alamat_domisili,

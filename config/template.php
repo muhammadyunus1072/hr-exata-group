@@ -37,6 +37,16 @@ return [
             'icon' => 'ki-duotone ki-element-11',
         ],
         [
+            'text' => 'Status Karir Karyawan',
+            'route'  => 'employee_career_status.index',
+            'icon' => 'ki-duotone ki-element-11',
+        ],
+        [
+            'text' => 'Aset Perusahaan',
+            'route'  => 'company_asset.index',
+            'icon' => 'ki-duotone ki-element-11',
+        ],
+        [
             // 'id' => 'menu_admin'
             'text' => 'Admin',
             'icon' => 'ki-duotone ki-shield-tick',

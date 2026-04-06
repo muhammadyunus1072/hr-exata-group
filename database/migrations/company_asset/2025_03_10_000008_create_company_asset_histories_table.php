@@ -11,19 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('employee_office_emails', function (Blueprint $table) {
+        Schema::create('company_asset_histories', function (Blueprint $table) {
             $this->scheme($table, false);
         });
 
-        Schema::create('_history_employee_office_emails', function (Blueprint $table) {
+        Schema::create('_history_company_asset_histories', function (Blueprint $table) {
             $this->scheme($table, true);
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('employee_office_emails');
-        Schema::dropIfExists('_history_employee_office_emails');
+        Schema::dropIfExists('company_asset_histories');
+        Schema::dropIfExists('_history_company_asset_histories');
     }
 
     private function scheme(Blueprint $table, $is_history = false)
@@ -35,9 +35,12 @@ return new class extends Migration
         } else {
         }
 
-        $table->bigInteger('user_id')->unsigned();
-        $table->string('email');
-        $table->string('password');
+        $table->unsignedBigInteger('company_asset_id');
+        $table->unsignedBigInteger('assigned_user_id');
+        $table->dateTime('assigned_at')->nullable();
+        $table->dateTime('returned_at')->nullable();
+        $table->string('status_kondisi')->nullable();
+        $table->string('status_barang')->nullable();
 
         $table->bigInteger("created_by")->unsigned()->nullable();
         $table->bigInteger("updated_by")->unsigned()->nullable();

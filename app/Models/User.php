@@ -2,7 +2,11 @@
 
 namespace App\Models;
 
+use App\Helpers\GlobalHelper;
+use App\Models\Company\CompanyAsset;
 use App\Models\Employee\EmployeeAdditionalInformation;
+use App\Models\Employee\EmployeeAdministrativeCareer;
+use App\Models\Employee\EmployeeCompanyAccount;
 use App\Models\Employee\EmployeeDrink;
 use App\Models\Employee\EmployeeEmergencyContact;
 use App\Models\Employee\EmployeeFood;
@@ -42,10 +46,13 @@ class User extends Authenticatable implements MustVerifyEmail
         'nomor_identitas',
         'tempat_lahir',
         'tanggal_lahir',
+        'zodiac',
         'jenis_kelamin',
         'agama',
         'status_perkawinan',
         'pendidikan_terakhir',
+        'keterangan_pendidikan_terakhir',
+        'golongan_darah',
         'jenis_apresiasi',
         'keterangan_apresiasi',
         'divisi',
@@ -55,12 +62,16 @@ class User extends Authenticatable implements MustVerifyEmail
         // Contact Information
         'no_telp_pribadi',
         'no_telp_kantor',
+        'tenggat_waktu_pembayaran',
 
         // Address Information
         'alamat_domisili',
         'alamat_sesuai_ktp',
 
-        'status',
+        'tanggal_masuk',
+        'tanggal_keluar',
+        'alasan_keluar',
+        'last_employee_career_id',
     ];
 
     /**
@@ -81,6 +92,16 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    protected static function onBoot()
+    {
+        self::saving(function ($model) {
+            if ($model->isDirty('tanggal_lahir')) {
+                $model->zodiac = GlobalHelper::getZodiacFromDate($model->tanggal_lahir);
+                logger($model->zodiac);
+            }
+        });
+    }
 
     const PASSWORD_DEFAULT = "EXATA2026";
 
@@ -123,6 +144,20 @@ class User extends Authenticatable implements MustVerifyEmail
         self::PENDIDIKAN_TERAKHIR_S3 => 'Doktor (S3)',
     ];
 
+    const GOLONGAN_DARAH_TIDAK_DIKETAHUI = '';
+    const GOLONGAN_DARAH_A = 'A';
+    const GOLONGAN_DARAH_B = 'B';
+    const GOLONGAN_DARAH_AB = 'AB';
+    const GOLONGAN_DARAH_O = 'O';
+
+    const GOLONGAN_DARAH_CHOICE = [
+        self::GOLONGAN_DARAH_TIDAK_DIKETAHUI => "Tidak Diketahui",
+        self::GOLONGAN_DARAH_A => "A",
+        self::GOLONGAN_DARAH_B => "B",
+        self::GOLONGAN_DARAH_AB => "AB",
+        self::GOLONGAN_DARAH_O => "O",
+    ];
+
     const JENIS_KELAMIN_L = 'Laki-laki';
     const JENIS_KELAMIN_P = 'Perempuan';
 
@@ -153,26 +188,26 @@ class User extends Authenticatable implements MustVerifyEmail
         self::NAMA_BANK_LAINNYA => "LAINNYA",
     ];
 
-    const DIVISI_EXATA = 'EXATA';
-    const DIVISI_YANOSHI = 'YANOSHI';
-    const DIVISI_TRAVEL = 'TRAVEL';
+    const DIVISI_EXATA = 'SUMBER REZEKI EXATA INDONESIA';
+    const DIVISI_YANOSHI = 'YANOSHI JAPAN OMIYAGE';
+    const DIVISI_TRAVEL = 'JAPANINDO TRAVEL CONNECTION';
 
     const DIVISI_CHOICE = [
-        self::DIVISI_EXATA => "EXATA",
-        self::DIVISI_YANOSHI => "YANOSHI",
-        self::DIVISI_TRAVEL => "TRAVEL",
+        self::DIVISI_EXATA => "SUMBER REZEKI EXATA INDONESIA",
+        self::DIVISI_YANOSHI => "YANOSHI JAPAN OMIYAGE",
+        self::DIVISI_TRAVEL => "JAPANINDO TRAVEL CONNECTION",
     ];
 
     const APPRECIATION_JALAN_JALAN = 'Jalan-jalan';
     const APPRECIATION_STAYCATION = 'Staycation';
-    const APPRECIATION_LIBUR = 'Libur';
     const APPRECIATION_HADIAH = 'Hadiah';
+    const APPRECIATION_LAINNYA = 'Lainnya';
 
     const APPRECIATION_CHOICE = [
         self::APPRECIATION_JALAN_JALAN => 'Jalan-jalan',
         self::APPRECIATION_STAYCATION => 'Staycation',
-        self::APPRECIATION_LIBUR => 'Libur',
         self::APPRECIATION_HADIAH => 'Hadiah',
+        self::APPRECIATION_LAINNYA => 'Lainnya',
     ];
 
     const STATUS_ACTIVE = 'Aktif';
@@ -184,6 +219,9 @@ class User extends Authenticatable implements MustVerifyEmail
     const ADDITIONAL_INFORMATION_BPJS_TK = 'BPJS TK';
     const ADDITIONAL_INFORMATION_KTP = 'KTP';
     const ADDITIONAL_INFORMATION_NPWP = 'NPWP';
+    const ADDITIONAL_INFORMATION_KARTU_AXA_MANDIRI = 'Foto Kartu AXA MANDIRI';
+    const ADDITIONAL_INFORMATION_SIM_A = 'SIM A';
+    const ADDITIONAL_INFORMATION_SIM_C = 'SIM C';
 
 
     public function employeeAdditionalInformations()
@@ -206,14 +244,24 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(EmployeeHobby::class, 'user_id', 'id');
     }
 
-    public function employeeOfficeEmails()
+    public function employeeCompanyAccounts()
     {
-        return $this->hasMany(EmployeeOfficeEmail::class, 'user_id', 'id');
+        return $this->hasMany(EmployeeCompanyAccount::class, 'user_id', 'id');
     }
 
     public function employeeEmergencyContacts()
     {
         return $this->hasMany(EmployeeEmergencyContact::class, 'user_id', 'id');
+    }
+
+    public function employeeAdministrativeCareers()
+    {
+        return $this->hasMany(EmployeeAdministrativeCareer::class, 'user_id', 'id');
+    }
+
+    public function companyAssets()
+    {
+        return $this->hasMany(CompanyAsset::class, 'assigned_user_id', 'id');
     }
 
     public function employeeAdditionalInformationKK()
@@ -245,5 +293,20 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasOne(EmployeeAdditionalInformation::class, 'user_id')
             ->where('deskripsi', self::ADDITIONAL_INFORMATION_NPWP);
+    }
+    public function employeeAdditionalInformationKartuAxaMandiri()
+    {
+        return $this->hasOne(EmployeeAdditionalInformation::class, 'user_id')
+            ->where('deskripsi', self::ADDITIONAL_INFORMATION_KARTU_AXA_MANDIRI);
+    }
+    public function employeeAdditionalInformationSimA()
+    {
+        return $this->hasOne(EmployeeAdditionalInformation::class, 'user_id')
+            ->where('deskripsi', self::ADDITIONAL_INFORMATION_SIM_A);
+    }
+    public function employeeAdditionalInformationSimC()
+    {
+        return $this->hasOne(EmployeeAdditionalInformation::class, 'user_id')
+            ->where('deskripsi', self::ADDITIONAL_INFORMATION_SIM_C);
     }
 }

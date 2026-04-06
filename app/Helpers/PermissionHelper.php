@@ -32,7 +32,12 @@ class PermissionHelper
     const ACCESS_PERMISSION = "permission";
     const ACCESS_ROLE = "role";
 
+    // EMPLOYEE
     const ACCESS_EMPLOYEE = "employee";
+    const ACCESS_EMPLOYEE_CAREER_STATUS = "employee_career_status";
+
+    // COMPANY ASSET
+    const ACCESS_COMPANY_ASSET = "company_asset";
 
     const ACCESS_ALL = [
         self::ACCESS_DASHBOARD,
@@ -40,7 +45,12 @@ class PermissionHelper
         self::ACCESS_PERMISSION,
         self::ACCESS_ROLE,
 
+        // EMPLOYEE
         self::ACCESS_EMPLOYEE,
+        self::ACCESS_EMPLOYEE_CAREER_STATUS,
+
+        // COMPANY
+        self::ACCESS_COMPANY_ASSET,
     ];
 
     const TRANSLATE_ACCESS = [
@@ -48,7 +58,12 @@ class PermissionHelper
         self::ACCESS_USER => "Pengguna",
         self::ACCESS_PERMISSION => "Akses",
 
+        // EMPLOYEE
         self::ACCESS_EMPLOYEE => "Karyawan",
+        self::ACCESS_EMPLOYEE_CAREER_STATUS => "Status Karir Karyawan",
+
+        // COMPANY
+        self::ACCESS_COMPANY_ASSET => "Aset Perusahaan",
     ];
 
     const ACCESS_TYPE_ALL = [
@@ -57,7 +72,13 @@ class PermissionHelper
         PermissionHelper::ACCESS_ROLE => PermissionHelper::TYPE_ALL,
         PermissionHelper::ACCESS_PERMISSION => PermissionHelper::TYPE_ALL,
 
+        // EMPLOYEE
         PermissionHelper::ACCESS_EMPLOYEE => PermissionHelper::TYPE_ALL,
+        PermissionHelper::ACCESS_EMPLOYEE_CAREER_STATUS => PermissionHelper::TYPE_ALL,
+
+
+        // COMPANY
+        PermissionHelper::ACCESS_COMPANY_ASSET => PermissionHelper::TYPE_ALL,
     ];
 
     /*

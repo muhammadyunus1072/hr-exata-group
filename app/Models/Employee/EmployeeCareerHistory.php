@@ -7,14 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Muhammadyunus1072\TrackHistory\HasTrackHistory;
 
-class EmployeeOfficeEmail extends Model
+class EmployeeCareerHistory extends Model
 {
     use HasFactory, SoftDeletes, HasTrackHistory;
 
     protected $fillable = [
+
         'user_id',
-        'email',
-        'password',
+        'employee_career_status_id',
+        'tanggal_mulai',
+        'tanggal_berakhir',
+        'lama_durasi_hari',
+        'deskripsi',
+        'is_active',
     ];
 
     protected $guarded = ['id'];
