@@ -14,6 +14,7 @@
         "maatwebsite/excel": "^3.1",
         "mews/captcha": "^3.3",
         "muhammadyunus1072/track-history": "^1.0",
+        "simplesoftwareio/simple-qrcode": "^4.2",
         "spatie/laravel-permission": "^6.3"
     },
     "require-dev": {

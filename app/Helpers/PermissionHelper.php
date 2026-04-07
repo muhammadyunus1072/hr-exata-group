@@ -38,6 +38,7 @@ class PermissionHelper
 
     // COMPANY ASSET
     const ACCESS_COMPANY_ASSET = "company_asset";
+    const ACCESS_COMPANY_ASSET_SCAN_QR = "company_asset_scan_qr";
 
     const ACCESS_ALL = [
         self::ACCESS_DASHBOARD,
@@ -51,6 +52,7 @@ class PermissionHelper
 
         // COMPANY
         self::ACCESS_COMPANY_ASSET,
+        self::ACCESS_COMPANY_ASSET_SCAN_QR,
     ];
 
     const TRANSLATE_ACCESS = [
@@ -64,6 +66,7 @@ class PermissionHelper
 
         // COMPANY
         self::ACCESS_COMPANY_ASSET => "Aset Perusahaan",
+        self::ACCESS_COMPANY_ASSET_SCAN_QR => "Aset Perusahaan - Scan QR",
     ];
 
     const ACCESS_TYPE_ALL = [
@@ -79,6 +82,7 @@ class PermissionHelper
 
         // COMPANY
         PermissionHelper::ACCESS_COMPANY_ASSET => PermissionHelper::TYPE_ALL,
+        PermissionHelper::ACCESS_COMPANY_ASSET_SCAN_QR => PermissionHelper::TYPE_ALL,
     ];
 
     /*
