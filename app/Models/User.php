@@ -6,12 +6,13 @@ use App\Helpers\GlobalHelper;
 use App\Models\Company\CompanyAsset;
 use App\Models\Employee\EmployeeAdditionalInformation;
 use App\Models\Employee\EmployeeAdministrativeCareer;
+use App\Models\Employee\EmployeeAssessmentReport;
 use App\Models\Employee\EmployeeCompanyAccount;
 use App\Models\Employee\EmployeeDrink;
 use App\Models\Employee\EmployeeEmergencyContact;
 use App\Models\Employee\EmployeeFood;
 use App\Models\Employee\EmployeeHobby;
-use App\Models\Employee\EmployeeOfficeEmail;
+use App\Traits\Models\UppercaseAttributes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -23,7 +24,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles, SoftDeletes, HasTrackHistory;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles, SoftDeletes, HasTrackHistory, UppercaseAttributes;
 
     /**
      * The attributes that are mass assignable.
@@ -74,6 +75,12 @@ class User extends Authenticatable implements MustVerifyEmail
         'last_employee_career_id',
     ];
 
+    protected array $uppercase = [
+        'name',
+        'username',
+        'tempat_lahir',
+        'keterangan_pendidikan_terakhir'
+    ];
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -158,12 +165,12 @@ class User extends Authenticatable implements MustVerifyEmail
         self::GOLONGAN_DARAH_O => "O",
     ];
 
-    const JENIS_KELAMIN_L = 'Laki-laki';
-    const JENIS_KELAMIN_P = 'Perempuan';
+    const JENIS_KELAMIN_L = 'LAKI-LAKI';
+    const JENIS_KELAMIN_P = 'PEREMPUAN';
 
     const JENIS_KELAMIN_CHOICE = [
-        self::JENIS_KELAMIN_L => "Laki-laki",
-        self::JENIS_KELAMIN_P => "Perempuan",
+        self::JENIS_KELAMIN_L => "LAKI-LAKI",
+        self::JENIS_KELAMIN_P => "PEREMPUAN",
     ];
 
     const STATUS_PERKAWINAN_KAWIN = 'Kawin';
@@ -191,11 +198,13 @@ class User extends Authenticatable implements MustVerifyEmail
     const DIVISI_EXATA = 'SUMBER REZEKI EXATA INDONESIA';
     const DIVISI_YANOSHI = 'YANOSHI JAPAN OMIYAGE';
     const DIVISI_TRAVEL = 'JAPANINDO TRAVEL CONNECTION';
+    const DIVISI_J_EXPERT = 'J-EXPERT';
 
     const DIVISI_CHOICE = [
         self::DIVISI_EXATA => "SUMBER REZEKI EXATA INDONESIA",
         self::DIVISI_YANOSHI => "YANOSHI JAPAN OMIYAGE",
         self::DIVISI_TRAVEL => "JAPANINDO TRAVEL CONNECTION",
+        self::DIVISI_J_EXPERT => "J-EXPERT",
     ];
 
     const APPRECIATION_JALAN_JALAN = 'Jalan-jalan';
@@ -257,6 +266,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function employeeAdministrativeCareers()
     {
         return $this->hasMany(EmployeeAdministrativeCareer::class, 'user_id', 'id');
+    }
+
+    public function employeeAssessmentReports()
+    {
+        return $this->hasMany(EmployeeAssessmentReport::class, 'user_id', 'id');
     }
 
     public function companyAssets()

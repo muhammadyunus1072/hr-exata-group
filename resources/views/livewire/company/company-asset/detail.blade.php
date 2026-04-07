@@ -15,6 +15,20 @@
         </div>
     </div>
         <div class="row">
+
+            <div class="col-md-4 mb-3">
+                <label>Jenis</label>
+                <select wire:model="jenis" class="form-select">
+                    <option value="">-- ISI --</option>
+                    @foreach (App\Models\Company\CompanyAsset::JENIS_CHOICE as $key => $name)    
+                        <option value="{{$name}}">{{$name}}</option>
+                    @endforeach
+                </select>
+                
+                @error('jenis')
+                <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
             <div class="col-md-4 mb-3">
                 <label>Nama Barang</label>
                 <input placeholder="Nama Barang" type="text" wire:model="nama_barang" class="form-control">
@@ -28,6 +42,14 @@
                 <input placeholder="Nomor Seri" type="text" wire:model="serial_number" class="form-control">
 
                 @error('serial_number')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="col-md-4 mb-3">
+                <label>Password</label>
+                <input placeholder="Password" type="text" wire:model="password" class="form-control">
+
+                @error('password')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
@@ -46,7 +68,7 @@
             </div>
             <div class="col-md-4 mb-3">
                 <label>Status Pembelian</label>
-                <select wire:model="status_kondisi" class="form-select">
+                <select wire:model="status_pembelian" class="form-select">
                     <option value="">-- ISI --</option>
                     @foreach (App\Models\Company\CompanyAsset::STATUS_PEMBELIAN_CHOICE as $key => $name)    
                         <option value="{{$name}}">{{$name}}</option>
@@ -86,18 +108,49 @@
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
-            <div class="col-md-4 mb-3">
-                <label>Pengguna saat ini</label>
-                <select wire:model="assigned_user_id" class="form-select">
-                    <option value="">-- ISI --</option>
-                    @foreach ($user_choice as $key => $name)    
-                        <option value="{{$key}}">{{$name}}</option>
-                    @endforeach
-                </select>
+            @if ($objId)
+                <div class="col-md-4 mb-3">
+                    <label>Pengguna saat ini</label>
+                    <select wire:model="assigned_user_id" class="form-select">
+                        <option value="">-- ISI --</option>
+                        @foreach ($user_choice as $key => $name)    
+                            <option value="{{$key}}">{{$name}}</option>
+                        @endforeach
+                    </select>
 
-                @error('assigned_user_id')
-                    <div class="text-danger">{{ $message }}</div>
-                @enderror
+                    @error('assigned_user_id')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+            @endif
+        </div>
+        <div class="row">
+            <div class="col-md-5">
+                <h3>Riwayat Penggunaan</h3>
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th style="border-bottom: 1px solid #ccc;" class="m-0 pb-1">Nama Pengguna</th>
+                            <th style="border-bottom: 1px solid #ccc;" class="m-0 pb-1">Penggunaan Awal</th>
+                            <th style="border-bottom: 1px solid #ccc;" class="m-0 pb-1">Kondisi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($company_asset_histories as $index => $item)
+                            <tr wire:key="company-asset-{{$index}}">
+                                <td class="m-0 py-0">
+                                    <p class="m-0">{{$item['assigned_user_name']}}</p>
+                                </td>
+                                <td class="m-0 py-0">
+                                    <p class="m-0">{{$item['assigned_at']}}</p>
+                                </td>
+                                <td class="m-0 py-0">
+                                    <p class="m-0">{{$item['status_kondisi']}}</p>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
         

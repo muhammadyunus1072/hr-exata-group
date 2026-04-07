@@ -43,6 +43,9 @@
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="aset-kantor-tab" data-bs-toggle="tab" data-bs-target="#aset-kantor-tab-pane" type="button" role="tab" aria-controls="aset-kantor-tab-pane" aria-selected="true"><h3>Aset Kantor</h3></button>
             </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="laporan-asesmen-tab" data-bs-toggle="tab" data-bs-target="#laporan-asesmen-tab-pane" type="button" role="tab" aria-controls="laporan-asesmen-tab-pane" aria-selected="true"><h3>Laporan Asesmen Karyawan</h3></button>
+            </li>
         </ul>
         <div class="tab-content" id="tabEmployeeContent">
             <div wire:ignore.self class="tab-pane fade show active" id="personal-tab-pane" role="tabpanel" aria-labelledby="personal-tab" tabindex="0">
@@ -66,6 +69,7 @@
                     <div class="col-md-4 mb-3">
                         <label>Divisi</label>
                         <select wire:model="divisi" class="form-select">
+                            <option value="">-- ISI --</option>
                             @foreach (App\Models\User::DIVISI_CHOICE as $key => $name)    
                                 <option value="{{$name}}">{{$name}}</option>
                             @endforeach
@@ -109,6 +113,7 @@
                     <div class="col-md-4 mb-3">
                         <label>Agama</label>
                         <select wire:model="agama" class="form-select">
+                            <option value="">-- ISI --</option>
                             @foreach (App\Models\User::AGAMA_CHOICE as $key => $name)    
                                 <option value="{{$name}}">{{$name}}</option>
                             @endforeach
@@ -121,6 +126,7 @@
                     <div class="col-md-4 mb-3">
                         <label>Status Perkawinan</label>
                         <select wire:model="status_perkawinan" class="form-select">
+                            <option value="">-- ISI --</option>
                             @foreach (App\Models\User::STATUS_PERKAWINAN_CHOICE as $key => $name)    
                                 <option value="{{$name}}">{{$name}}</option>
                             @endforeach
@@ -134,6 +140,7 @@
                         <label>Pendidikan Terakhir</label>
                         <div class="input-group">
                             <select wire:model="pendidikan_terakhir" class="form-select">
+                                <option value="">-- ISI --</option>
                                 @foreach (App\Models\User::PENDIDIKAN_TERAKHIR_CHOICE as $key => $name)    
                                     <option value="{{$name}}">{{$name}}</option>
                                 @endforeach
@@ -657,6 +664,72 @@
                                     </td>
                                     <td>
                                         <p class="form-control">{{$item['divisi']}}</p>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div wire:ignore.self class="tab-pane fade" id="laporan-asesmen-tab-pane" role="tabpanel" aria-labelledby="laporan-asesmen-tab" tabindex="0">
+                
+                <div class="row">
+                    <div class="col-auto">
+                        <button type="button" wire:loading.attr="disabled" class="btn btn-info btn-sm" wire:click="addAssessmentReport">
+                            Tambah Laporan Asesment
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Jenis Tes</th>
+                                <th style="width: 300px;">Nama File</th>
+                                <th>Keterangan</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($assessment_reports as $index_assessment_report => $item)
+                                <tr wire:key="emergency-contact-{{$index_assessment_report}}">
+                                    <td>
+                                        <select wire:model="assessment_reports.{{$index_assessment_report}}.type" class="form-select">
+                                            <option value="">-- ISI --</option>
+                                            @foreach (App\Models\Employee\EmployeeAssessmentReport::TYPE_CHOICE as $key => $name)    
+                                                <option value="{{$key}}">{{$name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="file" wire:model="assessment_reports.{{$index_assessment_report}}.file" class="form-control">
+                                        @if($item['file'] && $item['url'])
+                                            <div class="border rounded p-4 text-center bg-light">
+                                                <i class="bi bi-file-earmark fs-1"></i>
+                                                <div class="mt-2">
+                                                    {{ $item['nama_dokumen'] }}
+                                                </div>
+
+                                                <a href="{{ $item['url'] }}" download="{{$item['nama_dokumen']}}" target="_blank" class="btn btn-sm btn-primary mt-2">
+                                                    Download
+                                                </a>
+                                            </div>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <input placeholder="Deskripsi" type="text" wire:model="assessment_reports.{{$index_assessment_report}}.deskripsi" class="form-control">
+                                    </td>
+                                    <td>
+                                        <button type="button" wire:loading.attr="disabled" class="btn btn-danger btn-sm" wire:click="removeAssessmentReport('{{$index_assessment_report}}')">
+                                            <i class="ki-duotone ki-trash fs-1">
+                                                <span class="path1"></span>
+                                                <span class="path2"></span>
+                                                <span class="path3"></span>
+                                                <span class="path4"></span>
+                                                <span class="path5"></span>
+                                            </i>
+                                        </button>
                                     </td>
                                 </tr>
                             @endforeach

@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use Database\Seeders\CompanyAsset\CompanyAssetSeeder;
 use Database\Seeders\Employee\MasterEmployeeSeeder;
 use Database\Seeders\User\PermissionSeeder;
 use Database\Seeders\User\RoleSeeder;
@@ -22,6 +23,7 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             UserSeeder::class,
             MasterEmployeeSeeder::class,
+            CompanyAssetSeeder::class
         ]);
     }
 }

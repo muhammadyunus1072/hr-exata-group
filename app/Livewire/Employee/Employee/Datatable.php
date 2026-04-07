@@ -179,7 +179,10 @@ class Datatable extends Component
                 'searchable' => false,
                 'name' => 'Status',
                 'render' => function ($item) {
-                    return is_null($item->tanggal_keluar) ? 'Aktif' : 'Tidak Aktif';
+                    return is_null($item->tanggal_keluar)
+                        || now()->lt($item->tanggal_keluar)
+                        ? 'Aktif'
+                        : 'Tidak Aktif';
                 }
             ],
         ];

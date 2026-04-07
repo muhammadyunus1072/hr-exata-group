@@ -15,6 +15,11 @@ class CompanyAssetHistory extends Model
 
         'company_asset_id',
         'assigned_user_id',
+        'assigned_user_name',
+        'nama_barang',
+        'jenis',
+        'serial_number',
+        'password',
         'assigned_at',
         'returned_at',
         'status_kondisi',

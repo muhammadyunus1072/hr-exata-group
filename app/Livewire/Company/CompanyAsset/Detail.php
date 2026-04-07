@@ -20,7 +20,9 @@ class Detail extends Component
     public $assigned_user_id;
     public $assigned_at;
     public $nama_barang;
+    public $jenis;
     public $serial_number;
+    public $password;
     public $status_barang;
     public $status_kondisi;
     public $status_pembelian;
@@ -30,6 +32,8 @@ class Detail extends Component
 
     public $user_choice = [];
 
+    public $company_asset_histories = [];
+
     public function mount()
     {
         if ($this->objId) {
@@ -38,13 +42,17 @@ class Detail extends Component
             $this->assigned_user_id = $company_asset->assigned_user_id;
             $this->assigned_at = $company_asset->assigned_at;
             $this->nama_barang = $company_asset->nama_barang;
+            $this->jenis = $company_asset->jenis;
             $this->serial_number = $company_asset->serial_number;
+            $this->password = $company_asset->password;
             $this->status_barang = $company_asset->status_barang;
             $this->status_kondisi = $company_asset->status_kondisi;
             $this->status_pembelian = $company_asset->status_pembelian;
             $this->divisi = $company_asset->divisi;
             $this->brand = $company_asset->brand;
             $this->keterangan = $company_asset->keterangan;
+
+            $this->company_asset_histories = $company_asset->companyAssetHistories->toArray();
         }
         $this->user_choice = UserRepository::all()->pluck('name', 'id')->toArray();
     }
@@ -70,10 +78,12 @@ class Detail extends Component
             DB::transaction(function () {
                 $employee_id = null;
                 $validateData = [
-                    'assigned_user_id' => $this->assigned_user_id,
+                    'assigned_user_id' => $this->assigned_user_id ? $this->assigned_user_id : null,
                     'assigned_at' => $this->assigned_at,
                     'nama_barang' => $this->nama_barang,
+                    'jenis' => $this->jenis,
                     'serial_number' => $this->serial_number,
+                    'password' => $this->password,
                     'status_barang' => $this->status_barang,
                     'status_kondisi' => $this->status_kondisi,
                     'status_pembelian' => $this->status_pembelian,
@@ -82,7 +92,6 @@ class Detail extends Component
                     'keterangan' => $this->keterangan,
                 ];
                 if ($this->objId) {
-
                     CompanyAssetRepository::update(Crypt::decrypt($this->objId), $validateData);
                 } else {
                     CompanyAssetRepository::create($validateData);

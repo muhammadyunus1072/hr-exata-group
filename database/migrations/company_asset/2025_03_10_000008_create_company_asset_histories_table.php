@@ -36,7 +36,12 @@ return new class extends Migration
         }
 
         $table->unsignedBigInteger('company_asset_id');
-        $table->unsignedBigInteger('assigned_user_id');
+        $table->bigInteger('assigned_user_id')->unsigned()->nullable();
+        $table->string('assigned_user_name')->nullable();
+        $table->string('nama_barang')->nullable();
+        $table->string('jenis')->nullable();
+        $table->string('serial_number')->nullable();
+        $table->string('password')->nullable();
         $table->dateTime('assigned_at')->nullable();
         $table->dateTime('returned_at')->nullable();
         $table->string('status_kondisi')->nullable();

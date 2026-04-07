@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Repositories\Account\UserRepository;
 use App\Repositories\Employee\EmployeeAdditionalInformationRepository;
 use App\Repositories\Employee\EmployeeAdministrativeCareerRepository;
+use App\Repositories\Employee\EmployeeAssessmentReportRepository;
 use App\Repositories\Employee\EmployeeDrinkRepository;
 use App\Repositories\Employee\EmployeeEmergencyContactRepository;
 use App\Repositories\Employee\EmployeeFoodRepository;
@@ -103,6 +104,10 @@ class Detail extends Component
     // Company Asset
     public $company_assets = [];
 
+    // Assessment Report
+    public $assessment_reports = [];
+    public $assessment_report_removes = [];
+
     public function mount()
     {
         if ($this->objId) {
@@ -157,6 +162,17 @@ class Detail extends Component
                 ];
             }
 
+            foreach ($employee->employeeAssessmentReports as $report) {
+                $this->assessment_reports[] = [
+                    'id' => Crypt::encrypt($report->id),
+                    'nama_dokumen' => $report->nama_dokumen,
+                    'file' => $report->file,
+                    'type' => $report->type,
+                    'deskripsi' => $report->deskripsi,
+                    'url' => Storage::url($report->file),
+                ];
+            }
+
             foreach ($employee->employeeCompanyAccounts as $account) {
 
                 $this->company_accounts[] = [
@@ -180,10 +196,10 @@ class Detail extends Component
             foreach ($employee->companyAssets as $asset) {
 
                 $this->company_assets[] = [
-                    'id' => Crypt::encrypt($contact->id),
+                    'id' => Crypt::encrypt($asset->id),
                     'assigned_at' => $asset->assigned_at,
                     'nama_barang' => $asset->nama_barang,
-                    'serial_number' => $asset->serial_number,
+                    'serial_number' => $asset->serial_number ?? '-',
                     'status_barang' => $asset->status_barang,
                     'status_kondisi' => $asset->status_kondisi,
                     'status_pembelian' => $asset->status_pembelian,
@@ -438,6 +454,27 @@ class Detail extends Component
         unset($this->administration_careers[$index]);
     }
 
+    public function addAssessmentReport()
+    {
+        $this->assessment_reports[] = [
+            'id' => '',
+            'nama_dokumen' => '',
+            'deskripsi' => '',
+            'file' => '',
+            'type' => '',
+            'url' => '',
+        ];
+    }
+
+    public function removeAssessmentReport($index)
+    {
+
+        if ($this->assessment_reports[$index]['id']) {
+            $this->assessment_report_removes[] = $this->assessment_reports[$index]['id'];
+        }
+        unset($this->assessment_reports[$index]);
+    }
+
     public function addCompanyAccount()
     {
         $this->company_accounts[] = [
@@ -484,7 +521,7 @@ class Detail extends Component
                     'no_telp_kantor' => $this->no_telp_kantor,
                     'tenggat_waktu_pembayaran' => $this->tenggat_waktu_pembayaran,
                     'email' => $this->email,
-                    'password' => User::PASSWORD_DEFAULT,
+                    // 'password' => User::PASSWORD_DEFAULT,
 
                     // Address Information
                     'alamat_domisili' => $this->alamat_domisili,
@@ -729,6 +766,47 @@ class Detail extends Component
 
                 foreach ($this->administration_career_removes as $item) {
                     EmployeeAdministrativeCareerRepository::delete(Crypt::decrypt($item));
+                }
+                // Assessment Report
+                foreach ($this->assessment_reports as $assessment_report) {
+
+                    $data = [
+                        'user_id'   => $user_id,
+                        'deskripsi' => $assessment_report['deskripsi'],
+                        'type' => $assessment_report['type'],
+                    ];
+
+                    /**
+                     * Upload file jika ada file baru
+                     */
+                    if (
+                        !empty($assessment_report['file'])
+                        && $assessment_report['file'] instanceof \Livewire\Features\SupportFileUploads\TemporaryUploadedFile
+                    ) {
+
+                        $path = $assessment_report['file']
+                            ->store(FilePathHelper::FILE_EMPLOYEE_ASSESSMENT_REPORT, 'public');
+
+                        $data['file'] = $path;
+                        $data['nama_dokumen'] = $assessment_report['file']->getClientOriginalName();
+                    }
+
+                    /**
+                     * Update atau Create
+                     */
+                    if ($assessment_report['id']) {
+
+                        EmployeeAssessmentReportRepository::update(
+                            Crypt::decrypt($assessment_report['id']),
+                            $data
+                        );
+                    } else {
+                        EmployeeAssessmentReportRepository::create($data);
+                    }
+                }
+
+                foreach ($this->assessment_report_removes as $item) {
+                    EmployeeAssessmentReportRepository::delete(Crypt::decrypt($item));
                 }
 
                 // Company Account 

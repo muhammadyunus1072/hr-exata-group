@@ -12,7 +12,7 @@ class MasterEmployeeSeeder extends Seeder
     {
         Excel::import(
             new ImportMasterUser(),
-            storage_path('app/data_karyawan.xlsx')
+            storage_path('app/seeders/employee.xlsx')
         );
     }
 }

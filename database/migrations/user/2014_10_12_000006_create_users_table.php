@@ -63,6 +63,7 @@ return new class extends Migration
         $table->string('divisi')->nullable();
         $table->string('nama_bank')->nullable();
         $table->string('no_rekening')->nullable();
+        $table->string('npwp')->nullable();
 
         // Contact Information
         $table->string('no_telp_pribadi')->nullable();

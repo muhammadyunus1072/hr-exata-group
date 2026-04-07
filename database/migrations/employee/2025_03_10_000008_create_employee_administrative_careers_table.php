@@ -38,7 +38,7 @@ return new class extends Migration
         $table->bigInteger('user_id')->unsigned();
         $table->string('nama_dokumen')->nullable();
         $table->text('deskripsi')->nullable()->default(null);
-        $table->string('file')->nullable();
+        $table->text('file')->nullable();
 
         $table->bigInteger("created_by")->unsigned()->nullable();
         $table->bigInteger("updated_by")->unsigned()->nullable();

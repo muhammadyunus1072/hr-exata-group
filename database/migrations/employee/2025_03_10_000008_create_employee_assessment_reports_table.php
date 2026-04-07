@@ -11,19 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('employee_additional_information', function (Blueprint $table) {
+        Schema::create('employee_assessment_reports', function (Blueprint $table) {
             $this->scheme($table, false);
         });
 
-        Schema::create('_history_employee_additional_information', function (Blueprint $table) {
+        Schema::create('_history_employee_assessment_reports', function (Blueprint $table) {
             $this->scheme($table, true);
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('employee_additional_information');
-        Schema::dropIfExists('_history_employee_additional_information');
+        Schema::dropIfExists('employee_assessment_reports');
+        Schema::dropIfExists('_history_employee_assessment_reports');
     }
 
     private function scheme(Blueprint $table, $is_history = false)
@@ -39,6 +39,7 @@ return new class extends Migration
         $table->string('nama_dokumen')->nullable();
         $table->text('deskripsi')->nullable()->default(null);
         $table->text('file')->nullable();
+        $table->string('type')->nullable();
 
         $table->bigInteger("created_by")->unsigned()->nullable();
         $table->bigInteger("updated_by")->unsigned()->nullable();

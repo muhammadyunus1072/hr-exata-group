@@ -120,12 +120,20 @@ class Datatable extends Component
                 },
             ],
             [
+                'key' => 'jenis',
+                'name' => 'Jenis',
+            ],
+            [
                 'key' => 'nama_barang',
                 'name' => 'Nama Barang',
             ],
             [
                 'key' => 'serial_number',
                 'name' => 'Nomor Seri',
+            ],
+            [
+                'key' => 'password',
+                'name' => 'Password',
             ],
             [
                 'key' => 'brand',
@@ -143,7 +151,7 @@ class Datatable extends Component
                 'key' => 'assigned_user_id',
                 'name' => 'Pengguna saat ini',
                 'render' => function ($item) {
-                    return $item->assigned_user_id ? $item->assignedUser->name : 'Belum ada pengguna';
+                    return $item->assigned_user_name ?? 'Belum ada pengguna';
                 }
             ],
         ];

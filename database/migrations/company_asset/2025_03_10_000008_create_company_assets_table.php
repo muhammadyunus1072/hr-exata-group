@@ -35,9 +35,12 @@ return new class extends Migration
         } else {
         }
 
-        $table->unsignedBigInteger('assigned_user_id')->nullable();
+        $table->bigInteger('assigned_user_id')->unsigned()->nullable();
+        $table->string('assigned_user_name')->nullable();
         $table->dateTime('assigned_at')->nullable();
         $table->string('nama_barang');
+        $table->string('jenis')->nullable();
+        $table->string('password')->nullable();
         $table->string('serial_number')->nullable();
         $table->string('status_kondisi')->nullable();
         $table->string('status_barang')->nullable();
