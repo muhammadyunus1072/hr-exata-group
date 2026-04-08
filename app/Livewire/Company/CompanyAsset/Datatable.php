@@ -172,7 +172,7 @@ class Datatable extends Component
                 'name' => 'Divisi',
             ],
             [
-                'key' => 'assigned_user_id',
+                'key' => 'assigned_user_name',
                 'name' => 'Pengguna saat ini',
                 'render' => function ($item) {
                     return $item->assigned_user_name ?? 'Belum ada pengguna';
