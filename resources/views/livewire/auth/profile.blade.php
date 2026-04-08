@@ -21,20 +21,19 @@
         <li class="nav-item" role="presentation">
             <button class="nav-link" id="kontak-darurat-tab" data-bs-toggle="tab" data-bs-target="#kontak-darurat-tab-pane" type="button" role="tab" aria-controls="kontak-darurat-tab-pane" aria-selected="true"><h3>Kontak Darurat</h3></button>
         </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="administrasi-karir-tab" data-bs-toggle="tab" data-bs-target="#administrasi-karir-tab-pane" type="button" role="tab" aria-controls="administrasi-karir-tab-pane" aria-selected="true"><h3>Administrasi Karir</h3></button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="aset-kantor-tab" data-bs-toggle="tab" data-bs-target="#aset-kantor-tab-pane" type="button" role="tab" aria-controls="aset-kantor-tab-pane" aria-selected="true"><h3>Aset Kantor</h3></button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="laporan-asesmen-tab" data-bs-toggle="tab" data-bs-target="#laporan-asesmen-tab-pane" type="button" role="tab" aria-controls="laporan-asesmen-tab-pane" aria-selected="true"><h3>Laporan Asesmen Karyawan</h3></button>
+        </li>
     </ul>
     <div class="tab-content" id="tabEmployeeContent" wire:ignore.self>
         <div wire:ignore.self class="tab-pane fade show active" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
             <div class='row'>
-                <div class="col-md-6 mb-4">
-                    <label>Nama Lengkap</label>
-                    <input type="text" class="form-control @error('name') is-invalid @enderror" wire:model.blur="name" />
-
-                    @error('name')
-                        <div class="invalid-feedback">
-                            {{ $message }}
-                        </div>
-                    @enderror
-                </div>
                 <div class="col-md-6 mb-4">
                     <label>Username</label>
                     <input type="text" class="form-control @error('username') is-invalid @enderror" wire:model.blur="username" />
@@ -116,9 +115,10 @@
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
-               <div class="col-md-4 mb-3">
+                <div class="col-md-4 mb-3">
                     <label>Divisi</label>
                     <select wire:model="divisi" class="form-select">
+                        <option value="">-- ISI --</option>
                         @foreach (App\Models\User::DIVISI_CHOICE as $key => $name)    
                             <option value="{{$name}}">{{$name}}</option>
                         @endforeach
@@ -138,7 +138,10 @@
                 </div>
                 <div class="col-md-4 mb-3">
                     <label>Tanggal Lahir</label>
-                    <input placeholder="Tanggal Lahir" type="date" wire:model="tanggal_lahir" class="form-control">
+                    <div class="input-group">
+                        <input placeholder="Tanggal Lahir" type="date" wire:model="tanggal_lahir" class="form-control"/>
+                        <p class="form-control m-0 text-center">{{ $zodiac }}</p>
+                    </div>
 
                     @error('tanggal_lahir')
                         <div class="text-danger">{{ $message }}</div>
@@ -159,6 +162,7 @@
                 <div class="col-md-4 mb-3">
                     <label>Agama</label>
                     <select wire:model="agama" class="form-select">
+                        <option value="">-- ISI --</option>
                         @foreach (App\Models\User::AGAMA_CHOICE as $key => $name)    
                             <option value="{{$name}}">{{$name}}</option>
                         @endforeach
@@ -171,6 +175,7 @@
                 <div class="col-md-4 mb-3">
                     <label>Status Perkawinan</label>
                     <select wire:model="status_perkawinan" class="form-select">
+                        <option value="">-- ISI --</option>
                         @foreach (App\Models\User::STATUS_PERKAWINAN_CHOICE as $key => $name)    
                             <option value="{{$name}}">{{$name}}</option>
                         @endforeach
@@ -182,38 +187,55 @@
                 </div>
                 <div class="col-md-4 mb-3">
                     <label>Pendidikan Terakhir</label>
-                    <select wire:model="pendidikan_terakhir" class="form-select">
-                        @foreach (App\Models\User::PENDIDIKAN_TERAKHIR_CHOICE as $key => $name)    
-                            <option value="{{$name}}">{{$name}}</option>
+                    <div class="input-group">
+                        <select wire:model="pendidikan_terakhir" class="form-select">
+                            <option value="">-- ISI --</option>
+                            @foreach (App\Models\User::PENDIDIKAN_TERAKHIR_CHOICE as $key => $name)    
+                                <option value="{{$name}}">{{$name}}</option>
+                            @endforeach
+                        </select>
+                        <input placeholder="Keterangan" type="text" wire:model="keterangan_pendidikan_terakhir" class="form-control"/>
+                    </div>
+
+                    @error('pendidikan_terakhir')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label>Golongan Darah</label>
+                    <select wire:model="golongan_darah" class="form-select">
+                        @foreach (App\Models\User::GOLONGAN_DARAH_CHOICE as $key => $name)    
+                            <option value="{{$key}}">{{$name}}</option>
                         @endforeach
                     </select>
 
-                    @error('pendidikan_terakhir')
+                    @error('golongan_darah')
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="col-md-4 mb-3">
                     <label>Makanan</label>
                     <div class="input-group">
-                        <input type="text" wire:model="makanan.0.nama" placeholder="Makanan 1" class="form-control">
-                        <input type="text" wire:model="makanan.1.nama" placeholder="Makanan 2" class="form-control">
-                        <input type="text" wire:model="makanan.2.nama" placeholder="Makanan 3" class="form-control">
+                        <input type="text" wire:model="makanan.0.nama" placeholder="Nasi Goreng" class="form-control">
+                        <input type="text" wire:model="makanan.1.nama" placeholder="Sushi" class="form-control">
+                        <input type="text" wire:model="makanan.2.nama" placeholder="Bakso" class="form-control">
                     </div>
                 </div>
                 <div class="col-md-4 mb-3">
                     <label>Minuman</label>
                     <div class="input-group">
-                        <input type="text" wire:model="minuman.0.nama" placeholder="Minuman 1" class="form-control">
-                        <input type="text" wire:model="minuman.1.nama" placeholder="Minuman 2" class="form-control">
-                        <input type="text" wire:model="minuman.2.nama" placeholder="Minuman 3" class="form-control">
+                        <input type="text" wire:model="minuman.0.nama" placeholder="Kopi" class="form-control">
+                        <input type="text" wire:model="minuman.1.nama" placeholder="Teh Manis" class="form-control">
+                        <input type="text" wire:model="minuman.2.nama" placeholder="Jus Alpukat" class="form-control">
                     </div>
                 </div>
                 <div class="col-md-4 mb-3">
                     <label>Hobi</label>
                     <div class="input-group">
-                        <input type="text" wire:model="hobi.0.nama" placeholder="Hobi 1" class="form-control">
-                        <input type="text" wire:model="hobi.1.nama" placeholder="Hobi 2" class="form-control">
-                        <input type="text" wire:model="hobi.2.nama" placeholder="Hobi 3" class="form-control">
+                        <input type="text" wire:model="hobi.0.nama" placeholder="Membaca" class="form-control">
+                        <input type="text" wire:model="hobi.1.nama" placeholder="Olahraga" class="form-control">
+                        <input type="text" wire:model="hobi.2.nama" placeholder="Gaming" class="form-control">
                     </div>
                 </div>
                 <div class="col-md-4 mb-3">
@@ -239,15 +261,6 @@
                     </div>
                 </div>
 
-            </div>
-            <div class="row">
-
-                <div class="form-check m-2 mt-5">
-                    <input class="form-check-input" type="checkbox" wire:model="status">
-                    <label class="form-label ms-2 mb-2 fw-bold">
-                        Penanda Aktif
-                    </label>
-                </div>
             </div>
         </div>
         <div wire:ignore.self class="tab-pane fade" id="informasi-tambahan-tab-pane" role="tabpanel" aria-labelledby="informasi-tambahan-tab" tabindex="0">
@@ -462,6 +475,7 @@
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
+
                 <div class="col-md-4 mb-3">
                     <label>Alamat Domisili</label>
                     <input placeholder="Alamat Domisili" type="text" wire:model="alamat_domisili" class="form-control">
@@ -480,50 +494,7 @@
                 </div>
                 <div class="col-md-4"></div>
                 <div class="col-md-4"></div>
-                <div class="col-md-4">
-                    <div class="row">
-                        <div class="col-auto">
-                            <button type="button" wire:loading.attr="disabled" class="btn btn-info btn-sm" wire:click="addEmailKantor">
-                                Tambah Email Kantor
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="row">
-                        <table class="table table-sm">
-                            <thead>
-                                <tr>
-                                    <th>Email Kantor</th>
-                                    <th>Password</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($email_kantors as $index_email => $item)
-                                    <tr wire:key="email-kantor-{{$index_email}}">
-                                        <td>
-                                            <input placeholder="Email" type="email" wire:model="email_kantors.{{$index_email}}.email" class="form-control">
-                                        </td>
-                                        <td>
-                                            <input placeholder="Password" type="text" wire:model="email_kantors.{{$index_email}}.password" class="form-control">
-                                        </td>
-                                        <td>
-                                            <button type="button" wire:loading.attr="disabled" class="btn btn-danger btn-sm" wire:click="removeEmailKantor('{{$index_email}}')">
-                                                <i class="ki-duotone ki-trash fs-1">
-                                                    <span class="path1"></span>
-                                                    <span class="path2"></span>
-                                                    <span class="path3"></span>
-                                                    <span class="path4"></span>
-                                                    <span class="path5"></span>
-                                                </i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                
             </div>
         </div>
         <div wire:ignore.self class="tab-pane fade" id="kontak-darurat-tab-pane" role="tabpanel" aria-labelledby="kontak-darurat-tab" tabindex="0">
@@ -563,6 +534,243 @@
                                 </td>
                                 <td>
                                     <button type="button" wire:loading.attr="disabled" class="btn btn-danger btn-sm" wire:click="removeEmergencyContact('{{$index_emergency_contact}}')">
+                                        <i class="ki-duotone ki-trash fs-1">
+                                            <span class="path1"></span>
+                                            <span class="path2"></span>
+                                            <span class="path3"></span>
+                                            <span class="path4"></span>
+                                            <span class="path5"></span>
+                                        </i>
+                                    </button>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div wire:ignore.self class="tab-pane fade" id="administrasi-karir-tab-pane" role="tabpanel" aria-labelledby="administrasi-karir-tab" tabindex="0">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label>Tanggal Masuk</label>
+                    <input placeholder="Tanggal Masuk" type="date" wire:model="tanggal_masuk" class="form-control">
+
+                    @error('tanggal_masuk')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label>Tanggal Keluar</label>
+                    <input placeholder="Tanggal Keluar" type="date" wire:model="tanggal_keluar" class="form-control">
+
+                    @error('tanggal_keluar')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label>Alasan Keluar</label>
+                    <input placeholder="Alasan Keluar" type="text" wire:model="alasan_keluar" class="form-control">
+
+                    @error('alasan_keluar')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-auto">
+                    <button type="button" wire:loading.attr="disabled" class="btn btn-info btn-sm" wire:click="addAdministrationCareer">
+                        Tambah Administrasi Karir
+                    </button>
+                </div>
+            </div>
+            
+            <div class="row">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th style="width: 300px;">Nama File</th>
+                            <th>Keterangan</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($administration_careers as $index_administration_career => $item)
+                            <tr wire:key="emergency-contact-{{$index_administration_career}}">
+                                <td>
+                                    <input type="file" wire:model="administration_careers.{{$index_administration_career}}.file" class="form-control">
+                                    @if($item['file'] && $item['url'])
+                                        <div class="border rounded p-4 text-center bg-light">
+                                            <i class="bi bi-file-earmark fs-1"></i>
+                                            <div class="mt-2">
+                                                {{ $item['nama_dokumen'] }}
+                                            </div>
+
+                                            <a href="{{ $item['url'] }}" download="{{$item['nama_dokumen']}}" target="_blank" class="btn btn-sm btn-primary mt-2">
+                                                Download
+                                            </a>
+                                        </div>
+                                    @endif
+                                </td>
+                                <td>
+                                    <input placeholder="Deskripsi" type="text" wire:model="administration_careers.{{$index_administration_career}}.deskripsi" class="form-control">
+                                </td>
+                                <td>
+                                    <button type="button" wire:loading.attr="disabled" class="btn btn-danger btn-sm" wire:click="removeAdministrationCareer('{{$index_administration_career}}')">
+                                        <i class="ki-duotone ki-trash fs-1">
+                                            <span class="path1"></span>
+                                            <span class="path2"></span>
+                                            <span class="path3"></span>
+                                            <span class="path4"></span>
+                                            <span class="path5"></span>
+                                        </i>
+                                    </button>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div wire:ignore.self class="tab-pane fade" id="aset-kantor-tab-pane" role="tabpanel" aria-labelledby="aset-kantor-tab" tabindex="0">
+            <div class="row">
+                <div class="col-auto">
+                    <button type="button" wire:loading.attr="disabled" class="btn btn-info btn-sm" wire:click="addCompanyAccount">
+                        Tambah Aset Akun
+                    </button>
+                </div>
+            </div>
+            
+            <div class="row">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th style="width:150px;">Platform</th>
+                            <th>Username</th>
+                            <th>Password</th>
+                            <th>Catatan</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($company_accounts as $index_company_account => $item)
+                            <tr wire:key="emergency-contact-{{$index_company_account}}">
+                                <td>
+                                    <input placeholder="Gmail, FB, Tiktok" type="text" wire:model="company_accounts.{{$index_company_account}}.platform" class="form-control">
+                                </td>
+                                <td>
+                                    <input placeholder="Username" type="text" wire:model="company_accounts.{{$index_company_account}}.username" class="form-control">
+                                </td>
+                                <td>
+                                    <input placeholder="Password" type="text" wire:model="company_accounts.{{$index_company_account}}.password" class="form-control">
+                                </td>
+                                <td>
+                                    <input placeholder="Catatan" type="text" wire:model="company_accounts.{{$index_company_account}}.catatan" class="form-control">
+                                </td>
+                                <td>
+                                    <button type="button" wire:loading.attr="disabled" class="btn btn-danger btn-sm" wire:click="removeCompanyAccount('{{$index_company_account}}')">
+                                        <i class="ki-duotone ki-trash fs-1">
+                                            <span class="path1"></span>
+                                            <span class="path2"></span>
+                                            <span class="path3"></span>
+                                            <span class="path4"></span>
+                                            <span class="path5"></span>
+                                        </i>
+                                    </button>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <div class="row">
+                <h3>Aset Barang</h3>
+            </div>
+            <div class="row">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Nama Barang</th>
+                            <th>Nomor Seri</th>
+                            <th>Brand</th>
+                            <th>Kondisi</th>
+                            <th>Divisi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($company_assets as $index_company_asset => $item)
+                            <tr wire:key="company-asset-{{$index_company_asset}}">
+                                <td>
+                                    <p class="form-control">{{$item['nama_barang']}}</p>
+                                </td>
+                                <td>
+                                    <p class="form-control">{{$item['serial_number']}}</p>
+                                </td>
+                                <td>
+                                    <p class="form-control">{{$item['brand']}}</p>
+                                </td>
+                                <td>
+                                    <p class="form-control">{{$item['status_kondisi']}}</p>
+                                </td>
+                                <td>
+                                    <p class="form-control">{{$item['divisi']}}</p>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div wire:ignore.self class="tab-pane fade" id="laporan-asesmen-tab-pane" role="tabpanel" aria-labelledby="laporan-asesmen-tab" tabindex="0">
+            
+            <div class="row">
+                <div class="col-auto">
+                    <button type="button" wire:loading.attr="disabled" class="btn btn-info btn-sm" wire:click="addAssessmentReport">
+                        Tambah Laporan Asesment
+                    </button>
+                </div>
+            </div>
+            
+            <div class="row">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Jenis Tes</th>
+                            <th style="width: 300px;">Nama File</th>
+                            <th>Keterangan</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($assessment_reports as $index_assessment_report => $item)
+                            <tr wire:key="emergency-contact-{{$index_assessment_report}}">
+                                <td>
+                                    <select wire:model="assessment_reports.{{$index_assessment_report}}.type" class="form-select">
+                                        <option value="">-- ISI --</option>
+                                        @foreach (App\Models\Employee\EmployeeAssessmentReport::TYPE_CHOICE as $key => $name)    
+                                            <option value="{{$key}}">{{$name}}</option>
+                                        @endforeach
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="file" wire:model="assessment_reports.{{$index_assessment_report}}.file" class="form-control">
+                                    @if($item['file'] && $item['url'])
+                                        <div class="border rounded p-4 text-center bg-light">
+                                            <i class="bi bi-file-earmark fs-1"></i>
+                                            <div class="mt-2">
+                                                {{ $item['nama_dokumen'] }}
+                                            </div>
+
+                                            <a href="{{ $item['url'] }}" download="{{$item['nama_dokumen']}}" target="_blank" class="btn btn-sm btn-primary mt-2">
+                                                Download
+                                            </a>
+                                        </div>
+                                    @endif
+                                </td>
+                                <td>
+                                    <input placeholder="Deskripsi" type="text" wire:model="assessment_reports.{{$index_assessment_report}}.deskripsi" class="form-control">
+                                </td>
+                                <td>
+                                    <button type="button" wire:loading.attr="disabled" class="btn btn-danger btn-sm" wire:click="removeAssessmentReport('{{$index_assessment_report}}')">
                                         <i class="ki-duotone ki-trash fs-1">
                                             <span class="path1"></span>
                                             <span class="path2"></span>

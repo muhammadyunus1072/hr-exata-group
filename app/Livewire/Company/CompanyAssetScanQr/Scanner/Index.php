@@ -22,7 +22,6 @@ class Index extends Component
     #[On('on-scanned')]
     public function scanned($data)
     {
-        Alert::fail($this, 'Berhasil', $data);
         $this->getData($data);
     }
 

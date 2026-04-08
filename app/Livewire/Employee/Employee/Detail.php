@@ -507,6 +507,7 @@ class Detail extends Component
                     'username' => $this->nama_karyawan,
                     'name' => $this->nama_karyawan,
                     'nomor_identitas' => $this->nomor_identitas,
+                    'divisi' => $this->divisi,
                     'tempat_lahir' => $this->tempat_lahir,
                     'tanggal_lahir' => $this->tanggal_lahir,
                     'jenis_kelamin' => $this->jenis_kelamin,
