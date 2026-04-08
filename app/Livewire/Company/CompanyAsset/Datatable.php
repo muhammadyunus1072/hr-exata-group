@@ -4,6 +4,7 @@ namespace App\Livewire\Company\CompanyAsset;
 
 use App\Helpers\Alert;
 use App\Helpers\PermissionHelper;
+use App\Models\Company\CompanyAsset;
 use App\Repositories\Account\UserRepository;
 use App\Repositories\Company\CompanyAssetRepository;
 use App\Traits\Livewire\WithDatatable;
@@ -23,6 +24,8 @@ class Datatable extends Component
 
     // Delete Dialog
     public $targetDeleteId;
+
+    public $jenis;
 
     public function onMount()
     {
@@ -180,7 +183,7 @@ class Datatable extends Component
 
     public function getQuery(): Builder
     {
-        return CompanyAssetRepository::datatable(null);
+        return CompanyAssetRepository::datatable($this->jenis);
     }
 
     public function getView(): string

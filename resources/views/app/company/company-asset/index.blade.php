@@ -37,6 +37,9 @@
 @section('content')
 
     <div class="card">
+        <div class="card-header">
+            <livewire:company.company-asset.filter>
+        </div>
         <div class="card-body">
             <livewire:company.company-asset.datatable lazy>
         </div>

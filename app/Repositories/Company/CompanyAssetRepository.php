@@ -12,8 +12,10 @@ class CompanyAssetRepository extends MasterDataRepository
         return CompanyAsset::class;
     }
 
-    public static function datatable()
+    public static function datatable($jenis)
     {
-        return CompanyAsset::query();
+        return CompanyAsset::when($jenis, function ($query) use ($jenis) {
+            $query->where('jenis', $jenis);
+        });
     }
 }

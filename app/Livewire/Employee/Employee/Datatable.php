@@ -185,12 +185,19 @@ class Datatable extends Component
                         : 'Tidak Aktif';
                 }
             ],
+            [
+                'key' => 'nama_barangs',
+                'name' => 'Device',
+                'render' => function ($item) {
+                    return $item->nama_barangs;
+                }
+            ],
         ];
     }
 
     public function getQuery(): Builder
     {
-        return UserRepository::datatable(null);
+        return UserRepository::datatableKaryawan(null);
     }
 
     public function getView(): string

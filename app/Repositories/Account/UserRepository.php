@@ -3,9 +3,11 @@
 namespace App\Repositories\Account;
 
 use App\Helpers\MenuHelper;
+use App\Models\Company\CompanyAsset;
 use App\Models\User;
 use App\Repositories\MasterDataRepository;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class UserRepository extends MasterDataRepository
 {
@@ -39,13 +41,13 @@ class UserRepository extends MasterDataRepository
     public static function findByUsername($username)
     {
         return User::where('username', '=', $username)
-        ->first();
+            ->first();
     }
 
     public static function findByEmail($email)
     {
         return User::whereEmail($email)
-        ->first();
+            ->first();
     }
 
     public static function findByUsernameOrEmail($usernameOrEmail)
@@ -62,6 +64,26 @@ class UserRepository extends MasterDataRepository
                 $query->whereHas('roles', function ($query) use ($roleId) {
                     $query->whereId($roleId);
                 });
+            });
+    }
+
+    public static function datatableKaryawan($roleId)
+    {
+        $assetSub = CompanyAsset::query()
+            ->select(
+                'assigned_user_id',
+                DB::raw("GROUP_CONCAT(nama_barang SEPARATOR ', ') as nama_barangs")
+            )
+            ->groupBy('assigned_user_id');
+        return User::with('roles')
+            ->when($roleId, function ($query) use ($roleId) {
+                $query->whereHas('roles', function ($query) use ($roleId) {
+                    $query->whereId($roleId);
+                });
+            })
+            ->select('users.*', 'assets.nama_barangs')
+            ->leftJoinSub($assetSub, 'assets', function ($join) {
+                $join->on('users.id', '=', 'assets.assigned_user_id');
             });
     }
 }
