@@ -36,11 +36,11 @@ return [
             'route'  => 'employee.index',
             'icon' => 'ki-duotone ki-element-11',
         ],
-        [
-            'text' => 'Administrasi Karir',
-            'route'  => 'employee_career_status.index',
-            'icon' => 'ki-duotone ki-element-11',
-        ],
+        // [
+        //     'text' => 'Administrasi Karir',
+        //     'route'  => 'employee_career_status.index',
+        //     'icon' => 'ki-duotone ki-element-11',
+        // ],
         [
             'text' => 'Aset Perusahaan',
             'route'  => 'company_asset.index',
