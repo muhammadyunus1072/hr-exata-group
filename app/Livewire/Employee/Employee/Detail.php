@@ -537,7 +537,7 @@ class Detail extends Component
 
                     // Administration Careed
                     'tanggal_masuk' => $this->tanggal_masuk,
-                    'tanggal_keluar' => $this->tanggal_keluar,
+                    'tanggal_keluar' => $this->tanggal_keluar ? $this->tanggal_keluar : null,
                     'alasan_keluar' => $this->alasan_keluar,
                 ];
                 if ($this->objId) {

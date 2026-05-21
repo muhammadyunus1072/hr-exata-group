@@ -28,6 +28,11 @@ class Login extends Component
             return;
         }
 
+        if (!is_null($user->tanggal_keluar)) {
+            Alert::fail($this, 'Login Gagal', 'Akun Sudah Tidak Aktif');
+            return;
+        }
+
         if (!Hash::check($this->password, $user->password)) {
             Alert::fail($this, 'Login Gagal', 'Password Tidak Sesuai');
             return;
